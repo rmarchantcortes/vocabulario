@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Descargas</title>
+</head>
+<body>
+	<ion-view view-title="Descargas">
+	  	<ion-content class="padding">
+	  		<div class="list">
+			  <label class="item item-input item-select">
+			    <div class="input-label">
+			     Ordenar por:
+			    </div>
+			    <select id="combo" ng-model="descargas.orden"  ng-change="seleccionarDescarga()">
+			      <option value="nombre" >Nombre</option>
+			      <option value="asignatura" >Asignatura</option>
+			      <option value="fecha" >Fecha</option>
+			    </select>
+
+			  </label>
+			  <div id="contenedor">
+			    	
+			    </div>
+			</div>
+	  	</ion-content>
+  	</ion-view>
+</body>
+</html>
