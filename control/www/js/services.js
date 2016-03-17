@@ -1,10 +1,16 @@
 angular.module('starter.services', [])
 
-.factory('Chats', function() {
+.factory('Organizations', function() {
   // Might use a resource here that returns a JSON array
-
+  /*return $resource("js/data.json", //la url donde queremos consumir
+        {}, //aquí podemos pasar variables que queramos pasar a la consulta
+        //a la función get le decimos el método, y, si es un array lo que devuelve
+        //ponemos isArray en true
+        { get: { method: "GET", isArray: true }
+    })*/
   // Some fake testing data
-  var chats = [{
+  //var organizations = 
+  /*[{
     id: 0,
     name: 'Ben Sparrow',
     lastText: 'You on your way?',
@@ -29,19 +35,19 @@ angular.module('starter.services', [])
     name: 'Mike Harrington',
     lastText: 'This is wicked good ice cream.',
     face: 'img/mike.png'
-  }];
+  }];*/
 
   return {
-    all: function() {
-      return chats;
+    /*all: function() {
+      return organizations;
     },
     remove: function(chat) {
-      chats.splice(chats.indexOf(chat), 1);
-    },
-    get: function(chatId) {
-      for (var i = 0; i < chats.length; i++) {
-        if (chats[i].id === parseInt(chatId)) {
-          return chats[i];
+      organizations.splice(organizations.indexOf(organization), 1);
+    },*/
+    get: function(organizationId, global) {
+      for (var i = 0; i < global.length; i++) {
+        if (global[i].id === parseInt(organizationId)) {
+          return global[i];
         }
       }
       return null;

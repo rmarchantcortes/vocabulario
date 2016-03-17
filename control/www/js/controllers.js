@@ -1,8 +1,6 @@
 angular.module('starter.controllers', [])
 .controller('DescargasCtrl', function($scope, $http, $sce) {
-  $scope.showApp = function() {
-    console.log("asdasdasd");
-  };
+  console.log("descarga");
   var defaultHTTPHeaders = {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
@@ -60,26 +58,63 @@ angular.module('starter.controllers', [])
 client.database = 'u295276529_conte';*/
 
 })
-.controller('ChatsCtrl', function($scope, Chats) {
+.controller('OrganizationsCtrl', function($scope, $http, $sce) {
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
   // To listen for when this page is active (for example, to refresh data),
   // listen for the $ionicView.enter event:
-  //
+  //http://www.vocabulario.esy.es/persistirOrganizationsService.php
   //$scope.$on('$ionicView.enter', function(e) {
   //});
+    var urlCompleta ="http://www.vocabulario.esy.es/persistirOrganizationsService.php";
+    var postUrl = $sce.trustAsResourceUrl(urlCompleta);
+    $http.post(postUrl)
+    .then(
+    function (response) {
+                  console.log(response.data);
+                  $scope.organizations = response.data;
+                  organizations= $scope.organizations;
+                },
+                function (){
+        alert('Error al importar las organizaciones');
+      }
+                );
 
-  $scope.chats = Chats.all();
-  $scope.remove = function(chat) {
-    Chats.remove(chat);
-  };
+
+  
+  /*$scope.organization = Organization.all();
+  $scope.remove = function(organization) {
+    Organization.remove(organization);
+  };*/
 })
 
-.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
-  $scope.chat = Chats.get($stateParams.chatId);
+.controller('ClassCtrl', function($scope, $http, $sce, $stateParams, Organizations) {
+  var defaultHTTPHeaders = {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  };
+
+  $http.defaults.headers.post =defaultHTTPHeaders;
+  console.log(organizations);
+  $scope.cursos = {
+    idOrg : Organizations.get($stateParams.organizationId, organizations)
+  };
+    var urlCompleta ="http://www.vocabulario.esy.es/persistirClassService.php";
+    var postUrl = $sce.trustAsResourceUrl(urlCompleta);
+    $http.post(postUrl)
+    .then(
+    function (response) {
+                  console.log(response.data);
+                  $scope.cursos = response.data;
+                },
+                function (){
+        alert('Error al importar las organizaciones');
+      }
+                );
 })
 
 .controller('AccountCtrl', function($scope) {
+  console.log("accont");
   $scope.settings = {
     enableFriends: true
   };
