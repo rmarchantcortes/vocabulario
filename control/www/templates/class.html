@@ -16,7 +16,7 @@
 <ion-view view-title="{{organization[1]}}">
   <ion-content>
       <ion-list >
-        <ion-item class="item-remove-animate item-avatar item-icon-right"  ng-repeat="curso in cursos">
+        <ion-item class="item-remove-animate item-avatar item-icon-right"  ng-repeat="curso in cursos" href="#/tab/organizations/{{organization[0][0]}}/{{curso[0]}}">
           <img ng-src="img/curso.png">
           <h2>{{curso[1]}}</h2>
           <p>{{curso[2]}}</p>

@@ -93,7 +93,6 @@ client.database = 'u295276529_conte';*/
     'Content-Type': 'application/json',
     'Accept': 'application/json'
   };
-
   $http.defaults.headers.post =defaultHTTPHeaders;
   console.log(organizations);
   $scope.cursos = {
@@ -106,6 +105,32 @@ client.database = 'u295276529_conte';*/
     function (response) {
                   console.log(response.data);
                   $scope.cursos = response.data;
+                  clases = $scope.cursos;
+                },
+                function (){
+        alert('Error al importar las organizaciones');
+      }
+                );
+})
+
+.controller('StudentCtrl', function($scope, $http, $sce, $stateParams, Class) {
+  var defaultHTTPHeaders = {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  };
+
+  $http.defaults.headers.post =defaultHTTPHeaders;
+  console.log(clases);
+  $scope.alumnos = {
+    idOrg : Clases.get($stateParams.classId, clases)
+  };
+    var urlCompleta ="http://www.vocabulario.esy.es/persistirStudentService.php";
+    var postUrl = $sce.trustAsResourceUrl(urlCompleta);
+    $http.post(postUrl)
+    .then(
+    function (response) {
+                  console.log(response.data);
+                  $scope.alumnos = response.data;
                 },
                 function (){
         alert('Error al importar las organizaciones');
@@ -114,7 +139,7 @@ client.database = 'u295276529_conte';*/
 })
 
 .controller('AccountCtrl', function($scope) {
-  console.log("accont");
+  console.log("account");
   $scope.settings = {
     enableFriends: true
   };

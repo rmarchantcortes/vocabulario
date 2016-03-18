@@ -1,10 +1,10 @@
-<ion-view view-title="Establecimientos">
+<ion-view view-title="{{clases[1]}}">
   <ion-content>
       <ion-list >
-        <ion-item class="item-remove-animate item-avatar item-icon-right"  ng-repeat="organization in organizations" href="#/tab/organizations/{{organization[0]}}">
-          <img ng-src="img/organizacion.png">
-          <h2>{{organization[1]}}</h2>
-          <p>{{organization[2]}}</p>
+        <ion-item class="item-remove-animate item-avatar item-icon-right"  ng-repeat="alumno in alumnos">
+          <img ng-src="img/default.jpg">
+          <h2>{{alumno[1]}}</h2>
+          <p>{{alumno[2]}}</p>
         </ion-item>
       </ion-list>
       

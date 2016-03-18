@@ -53,4 +53,23 @@ angular.module('starter.services', [])
       return null;
     }
   };
+})
+
+.factory('Clases', function() {
+  return {
+    /*all: function() {
+      return organizations;
+    },
+    remove: function(chat) {
+      organizations.splice(organizations.indexOf(organization), 1);
+    },*/
+    get: function(classId, global) {
+      for (var i = 0; i < global.length; i++) {
+        if (global[i].id === parseInt(classId)) {
+          return global[i];
+        }
+      }
+      return null;
+    }
+  };
 });
