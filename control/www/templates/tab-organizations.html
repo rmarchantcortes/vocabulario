@@ -1,14 +1,14 @@
 <ion-view view-title="Establecimientos">
   <ion-content>
       <ion-list >
-        <ion-item class="item-remove-animate item-avatar item-icon-right"  ng-repeat="organization in organizations" href="#/tab/organizations/{{organization[0]}}">
+        <ion-item class="item-remove-animate item-avatar item-icon-right" ng-model="organization.id" ng-repeat="organization in organizations" ng-click="callToAddToProductList(organization.id, organization.nombre)" href="#/tab/organizations/{{organization.id}}"  >
           <img ng-src="img/organizacion.png">
-          <h2>{{organization[1]}}</h2>
-          <p>{{organization[2]}}</p>
+          <h2>{{organization.nombre}}</h2>
+          <p>{{organization.tipo}}</p>
         </ion-item>
       </ion-list>
       
-
+<!--ng-model="cursos.id_organización"-->
       <!--<ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="chat in chats" type="item-text-wrap" href="#/tab/chats/{{chat.id}}">
         <img ng-src="{{chat.face}}">
         <h2>{{chat.name}}</h2>

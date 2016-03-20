@@ -72,4 +72,23 @@ angular.module('starter.services', [])
       return null;
     }
   };
+})
+.service('productService', function() {
+  var productList = [];
+
+  var addProduct = function(idObj, nameObj) {
+      productList = [];
+      productList.push(idObj);
+      productList.push(nameObj);
+  };
+
+  var getProducts = function(){
+      return productList;
+  };
+
+  return {
+    addProduct: addProduct,
+    getProducts: getProducts
+  };
+
 });

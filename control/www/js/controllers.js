@@ -12,7 +12,7 @@ angular.module('starter.controllers', [])
     var urlCompleta = 'http://www.vocabulario.esy.es/persistirDescargasService.php';
     var postUrl = $sce.trustAsResourceUrl(urlCompleta);
     
-    $http.post(postUrl, $scope.descargas)
+    $http.post(postUrl)
     .then(
       function (success) {
         datos=success.data;
@@ -62,7 +62,7 @@ angular.module('starter.controllers', [])
 client.database = 'u295276529_conte';*/
 
 })
-.controller('OrganizationsCtrl', function($scope, $http, $sce) {
+.controller('OrganizationsCtrl', function($scope, $http, $sce, productService) {
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
   // To listen for when this page is active (for example, to refresh data),
@@ -70,6 +70,9 @@ client.database = 'u295276529_conte';*/
   //http://www.vocabulario.esy.es/persistirOrganizationsService.php
   //$scope.$on('$ionicView.enter', function(e) {
   //});
+    $scope.callToAddToProductList = function(idObj, nameObj){
+        productService.addProduct(idObj, nameObj);
+    };
     var urlCompleta ="http://www.vocabulario.esy.es/persistirOrganizationsService.php";
     var postUrl = $sce.trustAsResourceUrl(urlCompleta);
     $http.post(postUrl)
@@ -78,6 +81,7 @@ client.database = 'u295276529_conte';*/
                   console.log(response.data);
                   $scope.organizations = response.data;
                   organizations= $scope.organizations;
+
                 },
                 function (){
         alert('Error al importar las organizaciones');
@@ -92,19 +96,24 @@ client.database = 'u295276529_conte';*/
   };*/
 })
 
-.controller('ClassCtrl', function($scope, $http, $sce, $stateParams, Organizations) {
+.controller('ClassCtrl', function($scope, $http, $sce, $stateParams, productService) {
   var defaultHTTPHeaders = {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
   };
   $http.defaults.headers.post =defaultHTTPHeaders;
   console.log(organizations);
-  $scope.cursos = {
-    idOrg : Organizations.get($stateParams.organizationId, organizations)
+  $scope.products = productService.getProducts();
+  console.log($scope.products);
+  $scope.curso = {
+    nombre : '',
+    nivel: '',
+    id_organizacion : $scope.products[0]
   };
+
     var urlCompleta ="http://www.vocabulario.esy.es/persistirClassService.php";
     var postUrl = $sce.trustAsResourceUrl(urlCompleta);
-    $http.post(postUrl)
+    $http.post(postUrl, $scope.curso)
     .then(
     function (response) {
                   console.log(response.data);
