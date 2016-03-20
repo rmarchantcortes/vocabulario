@@ -13,10 +13,10 @@
   </ion-content>
 </ion-view>-->
 
-<ion-view view-title="{{products[1]}}">
+<ion-view view-title="{{Organization[1]}}">
   <ion-content>
       <ion-list >
-        <ion-item class="item-remove-animate item-avatar item-icon-right"  ng-repeat="curso in cursos" href="#/tab/organizations/{{organization.id}}/{{curso.id}}">
+        <ion-item class="item-remove-animate item-avatar item-icon-right"  ng-repeat="curso in cursos" ng-click="callToAddToClassList(curso.id, curso.nombre)" href="#/tab/organizations/{{organization.id}}/{{curso.id}}">
           <img ng-src="img/curso.png">
           <h2>{{curso.nombre}}</h2>
           <p>{{curso.nivel}}</p>

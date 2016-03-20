@@ -70,8 +70,8 @@ client.database = 'u295276529_conte';*/
   //http://www.vocabulario.esy.es/persistirOrganizationsService.php
   //$scope.$on('$ionicView.enter', function(e) {
   //});
-    $scope.callToAddToProductList = function(idObj, nameObj){
-        productService.addProduct(idObj, nameObj);
+    $scope.callToAddToOrganizationList = function(idObj, nameObj){
+        productService.addOrganization(idObj, nameObj);
     };
     var urlCompleta ="http://www.vocabulario.esy.es/persistirOrganizationsService.php";
     var postUrl = $sce.trustAsResourceUrl(urlCompleta);
@@ -80,7 +80,6 @@ client.database = 'u295276529_conte';*/
     function (response) {
                   console.log(response.data);
                   $scope.organizations = response.data;
-                  organizations= $scope.organizations;
 
                 },
                 function (){
@@ -96,19 +95,22 @@ client.database = 'u295276529_conte';*/
   };*/
 })
 
-.controller('ClassCtrl', function($scope, $http, $sce, $stateParams, productService) {
+.controller('ClassCtrl', function($scope, $http, $sce, productService) {
   var defaultHTTPHeaders = {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
   };
+  $scope.callToAddToClassList = function(idObj, nameObj){
+        productService.addClass(idObj, nameObj);
+        console.log(idObj+"===="+nameObj);
+    };
   $http.defaults.headers.post =defaultHTTPHeaders;
-  console.log(organizations);
-  $scope.products = productService.getProducts();
-  console.log($scope.products);
+  $scope.Organization = productService.getOrganization();
+  console.log($scope.Organization);
   $scope.curso = {
     nombre : '',
     nivel: '',
-    id_organizacion : $scope.products[0]
+    id_organizacion : $scope.Organization[0]
   };
 
     var urlCompleta ="http://www.vocabulario.esy.es/persistirClassService.php";
@@ -118,37 +120,40 @@ client.database = 'u295276529_conte';*/
     function (response) {
                   console.log(response.data);
                   $scope.cursos = response.data;
-                  clases = $scope.cursos;
                 },
                 function (){
-        alert('Error al importar las organizaciones');
-      }
-                );
+                  alert('Error al importar los Establecimientos');
+                }
+    );
 })
 
-.controller('StudentCtrl', function($scope, $http, $sce, $stateParams, Class) {
+.controller('StudentCtrl', function($scope, $http, $sce, productService) {
   var defaultHTTPHeaders = {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
   };
 
   $http.defaults.headers.post =defaultHTTPHeaders;
-  console.log(clases);
-  $scope.alumnos = {
-    idOrg : Clases.get($stateParams.classId, clases)
+  $scope.Class = productService.getClass();
+  console.log($scope.Class);
+  $scope.estudiante = {
+    nombre : '',
+    apellido: '',
+    nacimiento: '',
+    id_curso : $scope.Class[0]
   };
     var urlCompleta ="http://www.vocabulario.esy.es/persistirStudentService.php";
     var postUrl = $sce.trustAsResourceUrl(urlCompleta);
-    $http.post(postUrl)
+    $http.post(postUrl, $scope.estudiante)
     .then(
     function (response) {
                   console.log(response.data);
                   $scope.alumnos = response.data;
                 },
                 function (){
-        alert('Error al importar las organizaciones');
-      }
-                );
+                  alert('Error al importar las organizaciones');
+                }
+    );
 })
 
 .controller('AccountCtrl', function($scope) {

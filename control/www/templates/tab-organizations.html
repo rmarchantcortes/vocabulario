@@ -1,7 +1,7 @@
 <ion-view view-title="Establecimientos">
   <ion-content>
       <ion-list >
-        <ion-item class="item-remove-animate item-avatar item-icon-right" ng-model="organization.id" ng-repeat="organization in organizations" ng-click="callToAddToProductList(organization.id, organization.nombre)" href="#/tab/organizations/{{organization.id}}"  >
+        <ion-item class="item-remove-animate item-avatar item-icon-right" ng-model="organization.id" ng-repeat="organization in organizations" ng-click="callToAddToOrganizationList(organization.id, organization.nombre)" href="#/tab/organizations/{{organization.id}}"  >
           <img ng-src="img/organizacion.png">
           <h2>{{organization.nombre}}</h2>
           <p>{{organization.tipo}}</p>

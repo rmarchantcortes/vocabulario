@@ -1,10 +1,10 @@
-<ion-view view-title="{{clases[1]}}">
+<ion-view view-title="{{Class[1]}}">
   <ion-content>
       <ion-list >
         <ion-item class="item-remove-animate item-avatar item-icon-right"  ng-repeat="alumno in alumnos">
           <img ng-src="img/default.jpg">
-          <h2>{{alumno[1]}}</h2>
-          <p>{{alumno[2]}}</p>
+          <h2>{{alumno.nombre}}</h2>
+          <p>{{alumno.apellido}}</p>
         </ion-item>
       </ion-list>
       

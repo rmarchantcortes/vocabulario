@@ -75,20 +75,30 @@ angular.module('starter.services', [])
 })
 .service('productService', function() {
   var productList = [];
-
-  var addProduct = function(idObj, nameObj) {
+  var ClassList = [];
+  var addOrganization = function(idObj, nameObj) {
       productList = [];
       productList.push(idObj);
       productList.push(nameObj);
   };
 
-  var getProducts = function(){
+  var getOrganization = function(){
       return productList;
   };
+  var addClass = function(idObj, nameObj) {
+      ClassList = [];
+      ClassList.push(idObj);
+      ClassList.push(nameObj);
+  };
 
+  var getClass = function(){
+      return ClassList;
+  };
   return {
-    addProduct: addProduct,
-    getProducts: getProducts
+    addOrganization: addOrganization,
+    getOrganization: getOrganization,
+    addClass: addClass,
+    getClass: getClass
   };
 
 });
