@@ -6,15 +6,12 @@
 <body>
 	<ion-view view-title="Descargas">
 	  	<ion-content class="padding">
-	  		<div class="list" ng-init="seleccionarDescarga()">
+	  		<div class="list" ng-init="ordenarDescarga()">
 			  <label class="item item-input item-select">
 			    <div class="input-label">
 			     Ordenar por:
 			    </div>
-			    <select id="combo" ng-model="descargas.orden">
-			      <option value="nombre" >Nombre</option>
-			      <option value="asignatura" >Asignatura</option>
-			      <option value="fecha" >Fecha</option>
+			    <select id="combo" ng-model="selectedItem" ng-options="option for option in listOfOptions" ng-change="ordenarDescarga(selectedItem)">
 			    </select>
 
 			  </label>

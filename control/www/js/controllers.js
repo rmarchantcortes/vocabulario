@@ -7,36 +7,41 @@ angular.module('starter.controllers', [])
   };
 
   $http.defaults.headers.post =defaultHTTPHeaders;
-
-  $scope.descargas = 
-  {
-    orden : ''
-  };
-  $scope.seleccionarDescarga = function(){
+  $scope.listOfOptions = ['Nombre', 'Asignatura', 'Fecha'];
+  $scope.ordenarDescarga = function(selectedItem){
     var urlCompleta = 'http://www.vocabulario.esy.es/persistirDescargasService.php';
     var postUrl = $sce.trustAsResourceUrl(urlCompleta);
+    
     $http.post(postUrl, $scope.descargas)
     .then(
       function (success) {
         datos=success.data;
+        console.log(datos);
+        //datos.sort(nombre);
+        if(selectedItem=="Asignatura"){
+           datos=datos.sort(function(a,b) { return (a.asignatura > b.asignatura) ? 1 : ((b.asignatura > a.asignatura) ? -1 : 0);});
+        }else if(selectedItem=="Fecha"){
+           datos=datos.sort(function(a,b) { return (a.fecha > b.fecha) ? 1 : ((b.fecha > a.fecha) ? -1 : 0);});
+        }else{
+           datos=datos.sort(function(a,b) { return (a.nombre > b.nombre) ? 1 : ((b.nombre > a.nombre) ? -1 : 0);});
+        }
+       
         document.getElementById('contenedor').innerHTML = '';
         for (var i = 0; i < datos.length; i++) {
           var card = document.createElement('div');
           card.className ='card'; 
           card.innerHTML =  '<ion-card>'+
                               '<ion-item>'+
-                              '<a class="item item-avatar" href="#" onClick="window.open(\''+datos[i][4]+'\', \'_blank\')">'+
-                                '<img src="'+datos[i][3]+'" >'+
-                                '<h2><b>'+datos[i][0]+'</b></h2>'+
-                                '<p><b>'+datos[i][5]+'</b></p>'+
-                                '<p><b> Asignatura:</b> '+datos[i][1]+'</p>'+
-                                '<p><b> Curso:</b> '+datos[i][2]+'</p>'+
+                              '<a class="item item-avatar" href="#" onClick="window.open(\''+datos[i].linkapp+'\', \'_blank\')">'+
+                                '<img src="'+datos[i].imagen+'" >'+
+                                '<h2><b>'+datos[i].nombre+'</b></h2>'+
+                                '<p><b>'+datos[i].fecha+'</b></p>'+
+                                '<p><b> Asignatura:</b> '+datos[i].asignatura+'</p>'+
+                                '<p><b> Curso:</b> '+datos[i].curso+'</p>'+
                               '</a>'+
                               '</ion-item>'+
                             '</ion-card>';
-                                     // Append the text to <li>
           document.getElementById('contenedor').appendChild(card);
-          //document.getElementById('contenedor').innerHTML = '<p>'+datos[i][0]+'</P>';
         };
         
 
@@ -47,7 +52,6 @@ angular.module('starter.controllers', [])
       }
       );
   };
-   
 })
 .controller('DashCtrl', function($scope) {
 /*var client = mysql.createClient({
