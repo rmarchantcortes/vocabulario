@@ -1,0 +1,126 @@
+/* Empty. Add your own CSS if you like */
+#title2, #title3, #title4, #title5, #title6 {
+} 
+.fondo{
+	background-color: #1A1515;
+}
+.head{
+	background-color: #1A1515;
+}
+.list-inset{
+	margin:  10px 10px 10px 10px;
+	background: transparent;
+}
+.niveles{
+
+	background: transparent;
+	border:transparent;
+border-radius: 140px; overflow: hidden; -webkit-mask-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC);
+}
+#title2, #title3, #title4, #title5, #title6 {
+	opacity: 0;
+	z-index: -100;
+}
+#title1{
+	opacity: 1;
+	 z-index: 100;
+}
+.link{
+	padding-top: 30px;
+	text-align: center; 
+	
+	text-shadow: 0 1px 0 #bbb,
+                   0 2px 0 #bbb,
+                   0 3px 0 #aaa,
+                   0 4px 0 #aaa,
+                   0 5px 0 #999,
+                   0 6px 1px #000,
+                   0 0px 3px #000,
+                   0 1px 3px #000,
+                   0 3px 5px #000,
+               0 5px 10px #000,
+               0 5px 20px #000;
+	text-transform: uppercase; 
+	font-size: 50px;
+	background-size: 100% 100%;
+}
+#radtitle1:checked ~ #title1,
+#radtitle2:checked ~ #title2,
+#radtitle3:checked ~ #title3,
+#radtitle4:checked ~ #title4,
+#radtitle5:checked ~ #title5,
+#radtitle6:checked ~ #title6 {
+ opacity: 1;
+ z-index: 100;
+}
+/* Empty. Add your own CSS if you like */
+
+
+.line, .scroll {
+	
+}
+.principal{
+	height: 100%;
+}
+.square{
+	width: 10%;
+	height:  35px;
+	float: left;
+	border: 1px solid #ccc;
+	background-color: #FFD900;
+-webkit-box-shadow: inset 5px -5px 5px 0px rgba(0,0,0,0.6);
+-moz-box-shadow: inset 5px -5px 5px 0px rgba(0,0,0,0.6);
+box-shadow: inset 5px -5px 5px 0px rgba(0,0,0,0.6);
+border-radius: 5px 5px 5px 5px;
+-moz-border-radius: 5px 5px 5px 5px;
+-webkit-border-radius: 5px 5px 5px 5px;
+border: 1px solid #000000;
+/*-webkit-box-shadow: inset -10px 11px 13px 2px rgba(219,216,219,1);
+-moz-box-shadow: inset -10px 11px 13px 2px rgba(219,216,219,1);
+box-shadow: inset -10px 11px 13px 2px rgba(219,216,219,1);*/
+
+}
+.inp{
+	height: 100%;
+	width: 100%;
+	background-color: #00BBFF;
+	font-size: 23px;
+	text-align: center;
+	text-transform: uppercase;
+	font-weight:bold;
+	display: none;
+	visibility: hidden;
+}
+.i03_04, .i04_04, .i05_04, .i06_04, .i07_04, .i08_04, .i09_04, .i10_04,  .i11_04{
+	display: inline;
+	visibility: visible;
+}
+.complete{
+	width: 70%;
+}
+.line_text{
+	border: 0px solid;
+	border-bottom: 1px solid black;
+	margin-left: 5px;
+	margin-left: 5px;
+	font-size: 23px;
+	text-transform: uppercase;
+	font-weight:bold;
+	width: 20%;
+	background : inherit;
+}
+.spray{
+	width: 100%;
+	height: 200px;
+}
+#fondo{
+	width: 100%;
+    height: 100%;
+    background-size: cover;
+	background-image: url('http://thumbs.dreamstime.com/z/una-hoja-de-papel-de-un-cuaderno-38220035.jpg');
+
+}
+#account, #account1, body {
+
+}
+html { overflow:hidden; }
