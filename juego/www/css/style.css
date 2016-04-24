@@ -17,11 +17,12 @@
 	border:transparent;
 border-radius: 140px; overflow: hidden; -webkit-mask-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC);
 }
-#title2, #title3, #title4, #title5, #title6 {
+/*#title2,*/ #title3, #title4, #title5, #title6 {
 	opacity: 0;
 	z-index: -100;
 }
-#title1{
+/*cambiar*/
+#title1, #title2{
 	opacity: 1;
 	 z-index: 100;
 }
