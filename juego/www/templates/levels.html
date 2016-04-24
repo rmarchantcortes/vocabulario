@@ -6,7 +6,7 @@
         <input type="radio" id="rad{{level.name}}"
         ng-repeat="level in levels" hidden/>
     	<div class="item niveles"  ng-repeat="level in levels"  id="{{level.name}}" >
-    		<a class="item item-thumbnail-left link" href="#/app/levels/level.link" ng-click="startLevels(level.id)" style="background-image: url('../img/{{level.img}}'); color: black; " >{{level.title}}</a>
+    		<a class="item item-thumbnail-left link" ui-sref="app.levels.detail({{level.link}})" ng-click="startLevels(level.id)" style="background-image: url('../img/{{level.img}}'); color: black; " >{{level.title}}</a>
  		</div>
         <div class="gris" style="background-color: #ccc;" id="{{level.name}}" ng-repeat="level in levels">
         </div>
