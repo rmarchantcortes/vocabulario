@@ -50,8 +50,8 @@ angular.module('starter.controllers', [])
     }*/
   //$scope.page=serveInclude.getPage();s
   $scope.levels = [
-    { title: 'Nivel 1', id: 1 , name: 'title1', img: 'crayons.jpg', link: 'synonymous.html'},
-    { title: 'Nivel 2', id: 2 , name: 'title2', img: 'libros.jpg', link: 'playlist.html'},
+    { title: 'Nivel 1', id: 1 , name: 'title1', img: 'crayons.jpg', link: 'synonymous'},
+    { title: 'Nivel 2', id: 2 , name: 'title2', img: 'libros.jpg', link: 'single'},
     { title: 'Nivel 3', id: 3 , name: 'title3', img: 'letras.jpg', link: 'synonymous.html'},
     { title: 'Nivel 4', id: 4 , name: 'title4', img: 'lenguas.png', link: 'synonymous.html'},
     { title: 'Nivel 5', id: 5 , name: 'title5', img: 'idiomas.png', link: 'synonymous.html'},
@@ -68,16 +68,16 @@ angular.module('starter.controllers', [])
     //$scope.include = [{nombre: 'sinonimos.html'}];
   };
     //console.log(serveData.getdesblok());
-    /*if(serveData.pasoPorService()){
+    if(serveData.pasoPorService()){
       console.log("if");
-      document.getElementById("radtitle2").checked = serveData.getdesblok();
+      document.getElementById("radtitle3").checked = serveData.getdesblok();
     }else{
 
-    }*/
+    }
   $scope.desbloquear1 = function() {
     console.log("metodo 1");
-    serveData.desblok(true);
-    document.getElementById("radtitle2").checked = serveData.getdesblok();
+    //serveData.desblok(true);
+    document.getElementById("radtitle3").checked = serveData.getdesblok();
   };
 
   /*//<![CDATA[
@@ -113,7 +113,7 @@ segs--;
 var m = $timeout($scope.minutos(), 1000);
 //]]>*/
 })
-.controller('SynonymousCtrl', function($scope, $http, $sce, $ionicLoading, $compile, $ionicPopup, serveInclude) {
+.controller('SynonymousCtrl', function($scope, $http, $sce, $ionicLoading, $compile, $ionicPopup, serveInclude, serveData) {
   var words = [];
   var vocabularyLength = 0;
   var matrix = [];
@@ -270,8 +270,11 @@ var m = $timeout($scope.minutos(), 1000);
 
 
 })
-.controller('PlaylistCtrl', function($scope) {
-
+.controller('PlaylistCtrl', function($scope, serveData) {
+  $scope.pasarNivel =function(){
+    serveData.desblok(true);
+  };
+  
 })
 
 ;

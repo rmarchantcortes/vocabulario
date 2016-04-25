@@ -59,7 +59,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       }
     })
     .state('app.synonymous', {
-    url: '/levels/:synonymous',
+    url: '/synonymous',
     views: {
       'menuContent': {
         templateUrl: 'templates/synonymous.html',
@@ -68,7 +68,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     }
   })
   .state('app.single', {
-    url: '/levels/:playlistId',
+    url: '/playlist',
     views: {
       'menuContent': {
         templateUrl: 'templates/playlist.html',
