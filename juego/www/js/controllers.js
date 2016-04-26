@@ -47,11 +47,15 @@ angular.module('starter.controllers', [])
     {
             screen.lockOrientation('portrait');
 
-    }*/
-  //$scope.page=serveInclude.getPage();s
-  var alertPopup = $ionicPopup.alert({
+    }
+    $scope.$on("$ionicView.enter", function(event, data){
+   */ 
+     var alertPopup = $ionicPopup.alert({
           title: 'levels'
       });
+//});
+  //$scope.page=serveInclude.getPage();s
+
   $scope.levels = [
     { title: 'Nivel 1', id: 1 , name: 'title1', img: 'crayons.jpg', link: 'synonymous'},
     { title: 'Nivel 2', id: 2 , name: 'title2', img: 'libros.jpg', link: 'single'},
@@ -117,6 +121,7 @@ var m = $timeout($scope.minutos(), 1000);
 //]]>*/
 })
 .controller('SynonymousCtrl', function($scope, $http, $sce, $ionicLoading, $compile, $ionicPopup, serveInclude, serveData) {
+  var card = document.createElement('div');
   var words = [];
   var vocabularyLength = 0;
   var matrix = [];
@@ -138,6 +143,9 @@ var m = $timeout($scope.minutos(), 1000);
       });
     }
   };
+  /*$scope.pasarNivel= function(id){
+    serveData.desblok(true);
+  };*/
   $scope.itemSelected= function(id){
     if($scope.id==id){
       if(vocabularyLength>0){
@@ -145,7 +153,26 @@ var m = $timeout($scope.minutos(), 1000);
         $scope.showGame();
       }else{
         $scope.showAlertPopUp('Muy Bien', 'Se acabaron las palabras');
+        var recount = '<div >'+
+                        '<div class="list card">'+
+                        '<div class="item item-avatar">'+
+                          '<img src="avatar.jpg">'+
+                          '<h2>Pretty Hate Machine</h2>'+
+                          '<p>Nine Inch Nails</p>'+
+                        '</div>'+
+                        '<div class="item item-image">'+
+                          '<img src="cover.jpg">'+
+                        '</div>'+
+                        '<a class="item item-icon-left assertive" ui-sref="app.levels" ng-click="pasarNivel()" >'+
+                          '<i class="icon ion-music-note"></i>'+
+                          'Start listening'+
+                        '</a>'+
+                      '</div>'+
+                      '</div>';
+        card.className ='card'; 
+        var score = card.innerHTML = $compile(recount)($scope);
         page.empty();
+        page.append(score);
       }
     }else{
       if(vocabularyLength>0){
@@ -242,7 +269,6 @@ var m = $timeout($scope.minutos(), 1000);
         }
       };
       if(vocabularyLength>=0){
-        var card = document.createElement('div');
         card.className ='card'; 
         var voc1 = '<table style="width:100%">'+
                       '<tr style="width:100%; text-align: center; border: 1px solid black;">'+
@@ -273,10 +299,9 @@ var m = $timeout($scope.minutos(), 1000);
 
 
 })
-.controller('PlaylistCtrl', function($scope, serveData) {
-  $scope.pasarNivel =function(){
-    serveData.desblok(true);
-  };
+.controller('PlaylistCtrl', function($scope, $rootScope, $state, serveData) {
+  //$state.go('app.levels', {cache: false});
+  //$rootScope.reload;
   
 })
 

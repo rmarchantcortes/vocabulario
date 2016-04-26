@@ -51,6 +51,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     })
     .state('app.levels', {
       url: '/levels',
+      cache: false,
       views: {
         'menuContent': {
           templateUrl: 'templates/levels.html',
