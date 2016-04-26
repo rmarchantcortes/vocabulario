@@ -41,7 +41,7 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('LevelsCtrl', function($scope, $sce, $http, serveData, serveInclude) {
+.controller('LevelsCtrl', function($scope, $sce, $http, $ionicPopup, serveData, serveInclude) {
   /*document.addEventListener("deviceready", onDeviceReady, false);
     function onDeviceReady()
     {
@@ -49,6 +49,9 @@ angular.module('starter.controllers', [])
 
     }*/
   //$scope.page=serveInclude.getPage();s
+  var alertPopup = $ionicPopup.alert({
+          title: 'levels'
+      });
   $scope.levels = [
     { title: 'Nivel 1', id: 1 , name: 'title1', img: 'crayons.jpg', link: 'synonymous'},
     { title: 'Nivel 2', id: 2 , name: 'title2', img: 'libros.jpg', link: 'single'},
