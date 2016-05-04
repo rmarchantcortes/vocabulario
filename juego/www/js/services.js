@@ -6,36 +6,38 @@ angular.module('starter.services', [])
 .service('serveInclude', function() {
   var page=0;
   var setPage = function(lvl) {
-    console.log("setPage");
+    console.log("setPage: "+lvl);
     page = lvl;
   };
   var getPage = function(){
+    console.log("getPage: "+page);
     return page;
   };
+  var getNextPage = function(){
+    console.log("getNextPage: "+page+1);
+    return (page+1);
+  };
   return {
+    getNextPage: getNextPage,
     setPage: setPage,
     getPage: getPage
   };
 
 })
 .service('serveData', function() {
-	  var nose = false;
+	  var unlockLevels = 1;
 	  var aux = false;
-  var desblok = function(idObj) {
-  	console.log("service");
-    nose = idObj;
-    aux = true;
+  var setLastLevel = function(idObj) {
+    if (idObj > unlockLevels){
+      unlockLevels = idObj;
+    }
   };
-  var getdesblok = function(){
-    return nose;
-  };
-  var pasoPorService =function(){
-  	return aux;
+  var lastLevel =function(){
+  	return unlockLevels;
   };
   return {
-    desblok: desblok,
-    getdesblok: getdesblok,
-    pasoPorService: pasoPorService
+    setLastLevel: setLastLevel,
+    lastLevel: lastLevel
   };
 
 });

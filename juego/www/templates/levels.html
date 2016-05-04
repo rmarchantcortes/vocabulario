@@ -1,10 +1,9 @@
 <ion-view view-title="Niveles" class="head">
-<preference name="orientation" value="portrait/landscape" />
   <ion-content class="fondo">
   <span id="minutos">60</span> : <span id="segundos">00</span> 
     <div ng-view class="list list-inset">
         <input type="radio" id="rad{{level.name}}"
-        ng-repeat="level in levels" hidden/>
+        ng-repeat="level in levels" />
     	<div class="item niveles"  ng-repeat="level in levels"  id="{{level.name}}" >
     		<a class="item item-thumbnail-left link" ui-sref="app.{{level.link}}" ng-click="startLevels(level.id)" style="background-image: url('../img/{{level.img}}'); color: black; " >{{level.title}}</a>
  		</div>

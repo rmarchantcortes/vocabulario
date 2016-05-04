@@ -73,19 +73,25 @@ angular.module('starter.controllers', [])
   //sinonimos();
   $scope.sinonimos = function() {
     //$scope.include = [{nombre: 'sinonimos.html'}];
+    document.getElementById("radtitle4").checked==true;
+    
   };
     //console.log(serveData.getdesblok());
-    if(serveData.pasoPorService()){
-      console.log("if");
-      document.getElementById("radtitle3").checked = serveData.getdesblok();
-    }else{
 
-    }
-  $scope.desbloquear1 = function() {
-    console.log("metodo 1");
+    $scope.$on('$ionicView.afterEnter', function(){
+      var lastLevel = serveData.lastLevel();
+      console.log(lastLevel);
+      for (var i = 0 ; i<lastLevel; i++) {
+        console.log("i: "+i);
+        document.getElementById("radtitle"+(i+1)).checked=true;
+      }
+    });
+  //$scope.desbloquear1 = function() {
+    //console.log("metodo 1");
     //serveData.desblok(true);
-    document.getElementById("radtitle3").checked = serveData.getdesblok();
-  };
+    
+    //serveData.getdesblok();
+  //};
 
   /*//<![CDATA[
 // 1000 = 1 segundo
@@ -121,11 +127,13 @@ var m = $timeout($scope.minutos(), 1000);
 //]]>*/
 })
 .controller('SynonymousCtrl', function($scope, $http, $sce, $ionicLoading, $compile, $ionicPopup, serveInclude, serveData) {
+  var page = angular.element(document.getElementById('contenedor'));
   var card = document.createElement('div');
   var words = [];
   var vocabularyLength = 0;
   var matrix = [];
-  var page = angular.element(document.getElementById('contenedor'));
+  var times = 0;
+  var score = 0;
   $scope.show = function() {
     $ionicLoading.show({
       template: '<p>Loading...</p><ion-spinner></ion-spinner>'
@@ -143,47 +151,66 @@ var m = $timeout($scope.minutos(), 1000);
       });
     }
   };
-  /*$scope.pasarNivel= function(id){
-    serveData.desblok(true);
-  };*/
+  $scope.pasarNivel= function(id){
+    serveData.setLastLevel(id);
+  };
   $scope.itemSelected= function(id){
+    times++;
     if($scope.id==id){
-      if(vocabularyLength>0){
+      score += 10;
+      if(vocabularyLength>0 && times<10){
         $scope.showAlertPopUp('Muy Bien', null);
         $scope.showGame();
       }else{
-        $scope.showAlertPopUp('Muy Bien', 'Se acabaron las palabras');
-        var recount = '<div >'+
-                        '<div class="list card">'+
-                        '<div class="item item-avatar">'+
-                          '<img src="avatar.jpg">'+
-                          '<h2>Pretty Hate Machine</h2>'+
-                          '<p>Nine Inch Nails</p>'+
-                        '</div>'+
-                        '<div class="item item-image">'+
-                          '<img src="cover.jpg">'+
-                        '</div>'+
-                        '<a class="item item-icon-left assertive" ui-sref="app.levels" ng-click="pasarNivel()" >'+
-                          '<i class="icon ion-music-note"></i>'+
-                          'Start listening'+
-                        '</a>'+
-                      '</div>'+
-                      '</div>';
-        card.className ='card'; 
-        var score = card.innerHTML = $compile(recount)($scope);
-        page.empty();
-        page.append(score);
+        if(times>=10){
+          $scope.showAlertPopUp('Fallaste', 'Se ha terminado el minijuego');
+        }else{
+          $scope.showAlertPopUp('Muy Bien', 'Se acabaron las palabras');
+        }
+        $scope.setScore();
       }
     }else{
-      if(vocabularyLength>0){
+      score -= 2;
+      if(vocabularyLength>0 && times<10){
         $scope.showAlertPopUp('Fallaste, intenta en la siguiente', null);
         $scope.showGame();
       }else{
-        $scope.showAlertPopUp('Fallaste', 'Se acabaron las palabras');
-        page.empty();
+        if(times>=10){
+          $scope.showAlertPopUp('Fallaste', 'Se ha terminado el minijuego');
+        }else{
+          $scope.showAlertPopUp('Fallaste', 'Se acabaron las palabras');
+        }
+        $scope.setScore();
       }
     }
   };
+  $scope.setScore = function(){
+    var recount = '<div >'+
+                    '<div class="list card">'+
+                      '<div class="item item-avatar">'+
+                       '<img src="img/FUUU.png">'+
+                        '<h2>Usuario</h2>'+
+                        '<p>Sinonimos</p>'+
+                      '</div>'+
+                      '<div class="item">'+
+                        '<span><b>Puntaje: </b></span>'+
+                        '<span>'+score+'pts</span>'+
+                        '<span><b>Extra: </b></span>'+
+                        '<span>'+2+'pts</span>'+
+                        '<h2>'+(score+2)+'pts</h2>'+
+                      '</div>'+
+                      '<a class="item item-icon-right positive" ui-sref="app.levels" ng-click="pasarNivel('+serveInclude.getNextPage()+')" >'+
+                        'Continuar'+
+                        '<i class="icon ion-ios-play"></i>'+
+                      '</a>'+
+                    '</div>'+
+                  '</div>';
+        card.className ='card'; 
+        var scoreHTML = card.innerHTML = $compile(recount)($scope);
+        page.empty();
+        page.append(scoreHTML);
+  };
+
   $scope.hide = function(){
         $ionicLoading.hide();
   };
