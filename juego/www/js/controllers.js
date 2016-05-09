@@ -42,23 +42,13 @@ angular.module('starter.controllers', [])
 })
 
 .controller('LevelsCtrl', function($scope, $sce, $http, $ionicPopup, serveData, serveInclude) {
-  /*document.addEventListener("deviceready", onDeviceReady, false);
-    function onDeviceReady()
-    {
-            screen.lockOrientation('portrait');
-
-    }
-    $scope.$on("$ionicView.enter", function(event, data){
-   */ 
      var alertPopup = $ionicPopup.alert({
           title: 'levels'
       });
-//});
-  //$scope.page=serveInclude.getPage();s
 
   $scope.levels = [
     { title: 'Nivel 1', id: 1 , name: 'title1', img: 'crayons.jpg', link: 'synonymous'},
-    { title: 'Nivel 2', id: 2 , name: 'title2', img: 'libros.jpg', link: 'single'},
+    { title: 'Nivel 2', id: 2 , name: 'title2', img: 'libros.jpg', link: 'synonymous'},
     { title: 'Nivel 3', id: 3 , name: 'title3', img: 'letras.jpg', link: 'synonymous.html'},
     { title: 'Nivel 4', id: 4 , name: 'title4', img: 'lenguas.png', link: 'synonymous.html'},
     { title: 'Nivel 5', id: 5 , name: 'title5', img: 'idiomas.png', link: 'synonymous.html'},
@@ -69,15 +59,6 @@ angular.module('starter.controllers', [])
     serveInclude.setPage(id);
   };
 
-  //$window.location.href= $scope.include(0).include;
-  //sinonimos();
-  $scope.sinonimos = function() {
-    //$scope.include = [{nombre: 'sinonimos.html'}];
-    document.getElementById("radtitle4").checked==true;
-    
-  };
-    //console.log(serveData.getdesblok());
-
     $scope.$on('$ionicView.afterEnter', function(){
       var lastLevel = serveData.lastLevel();
       console.log(lastLevel);
@@ -86,47 +67,8 @@ angular.module('starter.controllers', [])
         document.getElementById("radtitle"+(i+1)).checked=true;
       }
     });
-  //$scope.desbloquear1 = function() {
-    //console.log("metodo 1");
-    //serveData.desblok(true);
-    
-    //serveData.getdesblok();
-  //};
-
-  /*//<![CDATA[
-// 1000 = 1 segundo
-var mins = 59;
-var segs = 59;
-var s;
-$scope.minutos = function(){
-document.getElementById("minutos").innerHTML=mins;
-console.log("min");
-if(mins == 0){
-var dm = clearInterval(m);
-
-}else{
-
-}
-//s = $timeout($scope.segundos(), 1000);
-mins--;
-};
- 
-$scope.segundos = function(){
-  console.log("seg");
-document.getElementById("segundos").innerHTML=segs;
-if(segs == 0){
-location.reload();
-var ds = clearInterval(s);
-}else{
-  //s = $timeout($scope.segundos(), 1000);
-}
-segs--;
-};
- 
-var m = $timeout($scope.minutos(), 1000);
-//]]>*/
 })
-.controller('SynonymousCtrl', function($scope, $http, $sce, $ionicLoading, $compile, $ionicPopup, serveInclude, serveData) {
+.controller('SynonymousCtrl', function($scope, $http, $sce, $ionicLoading, $compile, $ionicPopup, $timeout, serveInclude, serveData) {
   var page = angular.element(document.getElementById('contenedor'));
   var card = document.createElement('div');
   var words = [];
@@ -134,6 +76,21 @@ var m = $timeout($scope.minutos(), 1000);
   var matrix = [];
   var times = 0;
   var score = 0;
+  var gameDone = false;
+  $scope.timer = 100;
+  (function update() {
+    //$timeout(update, 1000 * 5); 5 segundos
+    //$timeout(update, 1000); 1 segundo
+    if(!gameDone){
+      if($scope.timer<=0){
+        $scope.gameOverForTime();
+      }else{
+        $timeout(update, 1000);
+        $scope.timer -= 1;
+      }
+    }
+    
+  }());
   $scope.show = function() {
     $ionicLoading.show({
       template: '<p>Loading...</p><ion-spinner></ion-spinner>'
@@ -152,7 +109,13 @@ var m = $timeout($scope.minutos(), 1000);
     }
   };
   $scope.pasarNivel= function(id){
-    serveData.setLastLevel(id);
+    if(gameDone){
+      serveData.setLastLevel(id);
+    }
+  };
+  $scope.gameOverForTime = function(){
+    $scope.showAlertPopUp('Juego terminado', 'El tiempo se acabó');
+    $scope.setScore();
   };
   $scope.itemSelected= function(id){
     times++;
@@ -167,6 +130,7 @@ var m = $timeout($scope.minutos(), 1000);
         }else{
           $scope.showAlertPopUp('Muy Bien', 'Se acabaron las palabras');
         }
+        gameDone = true;
         $scope.setScore();
       }
     }else{
@@ -180,11 +144,13 @@ var m = $timeout($scope.minutos(), 1000);
         }else{
           $scope.showAlertPopUp('Fallaste', 'Se acabaron las palabras');
         }
+        gameDone = true;
         $scope.setScore();
       }
     }
   };
   $scope.setScore = function(){
+    //stop timer
     var recount = '<div >'+
                     '<div class="list card">'+
                       '<div class="item item-avatar">'+
@@ -229,11 +195,18 @@ var m = $timeout($scope.minutos(), 1000);
                   console.log(vocabularyLength);
                   switch(serveInclude.getPage()){
                     case 1:
+                      console.log('case 1');
                       $scope.numdata = 3;
+                      break;
+                    case 2:
+                      console.log('case 2');
+                      $scope.numdata = 4;
+                      break;
                   }
                   if($scope.showGame()==true){
                     $scope.hide($ionicLoading);  
                     $scope.showAlertPopUp('Iniciar juego', 'Preparate!');
+                    $scope.timer=20;
                   }else{
                     $scope.hide($ionicLoading); 
                     $scope.showAlertPopUp('Ha ocurrido un error', 'porfavor, vuelve a cargar el minijuego');
@@ -297,22 +270,16 @@ var m = $timeout($scope.minutos(), 1000);
       };
       if(vocabularyLength>=0){
         card.className ='card'; 
-        var voc1 = '<table style="width:100%">'+
-                      '<tr style="width:100%; text-align: center; border: 1px solid black;">'+
-                        '<div style="width:100%;  text-align: center;"><span id="'+$scope.id+'" name="titulo" style="width:100%; text-align: center;">'+$scope.name+'</span></div>'+
-                      '</tr>'+
-                      '<tr style="width:100%">';
+        var voc1 ='<h2 id="'+$scope.id+'" name="titulo" style="width:100%; text-align: center;">'+$scope.name+'</h2>';
         //desordena las alternativas              
         matrix = matrix.sort(function() {return Math.random() - 0.5});
         //ingresa las alternativas
         for (var i = 0; i < $scope.numdata; i++) {
-          alternative = alternative + '<td style="width:33%; text-align: center; border: 1px solid black;"><button ng-click="itemSelected('+matrix[i][0]+')" id="'+matrix[i][0]+'" name="alternative_'+i+'"  style="width:90%;">'+matrix[i][1]+'</button></td>';
+          alternative = alternative + '<button class="button button-block button-fix button-balanced" ng-click="itemSelected('+matrix[i][0]+')" id="'+matrix[i][0]+'" name="alternative_'+i+'"  style="width:90%;">'+matrix[i][1]+'</button>';
         };
-        var voc2 =    '</tr>'+
-                    '</table>';
         //compilar botones ya que ng-click no setea al corer la pagina, 
         //por lo tanto las alteraciones en el DOM no son vistas por este
-        var html = card.innerHTML = $compile(voc1 + alternative + voc2)($scope);
+        var html = card.innerHTML = $compile(voc1 + alternative)($scope);
         page.empty();
         page.append(html);
         return true;

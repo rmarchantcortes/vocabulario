@@ -14,7 +14,7 @@ angular.module('starter.services', [])
     return page;
   };
   var getNextPage = function(){
-    console.log("getNextPage: "+page+1);
+    console.log("getNextPage: "+(page+1));
     return (page+1);
   };
   return {
