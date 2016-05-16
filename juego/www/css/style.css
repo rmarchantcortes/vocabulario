@@ -131,7 +131,7 @@ box-shadow: inset -10px 11px 13px 2px rgba(219,216,219,1);*/
   display: table !important;
   width: 100% !important;
   /*altura del centrado vertical*/
-  height: 80% !important;
+  height: 100% !important;
 }
 .scroll {
   display: table-cell;
@@ -144,8 +144,39 @@ box-shadow: inset -10px 11px 13px 2px rgba(219,216,219,1);*/
 .fondo-synonymous{
 	background-color: #CECECE;
 }
+.div-header{
+	height: 50px;
+	top: 0;
+	border-top-width: 0;
+	border-bottom-width: 0px;
+}
+.d-card{
+	position: relative;
+}
+.d-corner{
+	font-size: 100px;
+	top: -999px;
+	position: absolute;
+	right: -5px;
+	z-index: 100;
+}
+.d-corner-off{
+	z-index: -1;
+	right: -5px;
+	opacity: 0;
+	position: absolute;
+	transition: all 0.005s ease;
+}
+.d-corner-down{
+	top: -35px;
+	z-index: 100;
+	position: absolute;
+	opacity: 1;
+	transition: all 15s ease;
+}
 /* STYLES*/
 .three-dimensions{
+
 	display: block;
 	-webkit-box-sizing: content-box;
 	-moz-box-sizing: content-box;
@@ -163,8 +194,6 @@ box-shadow: inset -10px 11px 13px 2px rgba(219,216,219,1);*/
 	border: none;
 	-webkit-border-radius: 0;
 	border-radius: 0;
-	font: normal 72px/normal "Passero One", Helvetica, sans-serif;
-	color: rgba(255,255,255,1);
 	text-align: center;
 	-o-text-overflow: clip;
 	text-overflow: clip;
@@ -180,5 +209,20 @@ box-shadow: inset -10px 11px 13px 2px rgba(219,216,219,1);*/
 	transform: none;
 	-webkit-transform-origin: 50% 50% 0;
 	transform-origin: 50% 50% 0;
+	transition: all 0.5s ease;
 }
+.d-normal{
+	font: normal 20px/normal "Passero One", Helvetica, sans-serif;
+	color: rgba(255,255,255,1);
+}
+.d-small{
+	font: normal 15px/normal "Passero One", Helvetica, sans-serif;
+	color: rgba(255,255,255,1);
+}
+.d-focus{
+	color: red;
+	font: normal 30px/normal "Passero One", Helvetica, sans-serif;
+	transition: all 0.05s ease;
+}
+
 html { overflow:hidden; }

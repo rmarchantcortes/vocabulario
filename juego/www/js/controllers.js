@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+.controller('AppCtrl', function($scope, $sce, $http, $ionicPopup, $ionicLoading, $ionicModal, $timeout, serveLogin) {
 
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -29,27 +29,73 @@ angular.module('starter.controllers', [])
     $scope.modal.show();
   };
 
+  $scope.show = function() {
+    $ionicLoading.show({
+      template: '<p>Loading...</p><ion-spinner></ion-spinner>'
+    });
+  };
+  $scope.hide = function(){
+        $ionicLoading.hide();
+  };
   // Perform the login action when the user submits the login form
   $scope.doLogin = function() {
     console.log('Doing login', $scope.loginData);
     //screen.lockOrientation('portrait');
     // Simulate a login delay. Remove this and replace with your login
     // code if using a login system
-    $timeout(function() {
+    $scope.user = {
+      username : '',
+      password : ''
+    };
+    var entity = $scope.user;
+    var objJSON = JSON.stringify($scope.loginData);
+
+    $scope.show($ionicLoading);
+    // Do the call to a service using $http or directly do the call here
+    var urlCompleta ="http://www.vocabulario.esy.es/persistirLoginService.php";
+    var postUrl = $sce.trustAsResourceUrl(urlCompleta);
+    console.log(objJSON);
+    $http.post(postUrl, objJSON)
+    .then(
+    function (response) {
+                  $scope.exist = response.data;
+                  console.log($scope.exist);
+                  $scope.hide($ionicLoading);  
+                  if($scope.exist.length > 0){
+                    serveLogin.setUser($scope.exist[0].id,$scope.exist[0].nombre,$scope.exist[0].apellido);
+                    var alertPopup = $ionicPopup.alert({
+                        title: 'Saludos '+$scope.exist[0].nombre
+                    });
+                  }else{
+                    var alertPopup = $ionicPopup.alert({
+                        title: 'Usuario no encontrado'
+                    });
+                  }
+                  $scope.closeLogin();
+                },
+                function (){
+                  $scope.hide($ionicLoading);  
+                  var alertPopup = $ionicPopup.alert({
+                        title: 'error al intentar obtener tus datos'
+                    });
+                  $scope.closeLogin();
+                }
+    );
+    /*$timeout(function() {
       $scope.closeLogin();
-    }, 1000);
+    }, 1000);*/
   };
 })
 
 .controller('LevelsCtrl', function($scope, $sce, $http, $ionicPopup, serveData, serveInclude) {
-     var alertPopup = $ionicPopup.alert({
+/*     var alertPopup = $ionicPopup.alert({
           title: 'levels'
-      });
+      });*/
 
   $scope.levels = [
     { title: 'Nivel 1', id: 1 , name: 'title1', img: 'crayons.jpg', link: 'synonymous'},
     { title: 'Nivel 2', id: 2 , name: 'title2', img: 'libros.jpg', link: 'synonymous'},
-    { title: 'Nivel 3', id: 3 , name: 'title3', img: 'letras.jpg', link: 'synonymous.html'},
+    { title: 'Nivel 3', id: 3 , name: 'title3', img: 'letras.jpg', link: 'single'},
     { title: 'Nivel 4', id: 4 , name: 'title4', img: 'lenguas.png', link: 'synonymous.html'},
     { title: 'Nivel 5', id: 5 , name: 'title5', img: 'idiomas.png', link: 'synonymous.html'},
     { title: 'Nivel 6', id: 6 , name: 'title6', img: 'crucigramas.jpg', link: 'synonymous.html'}
@@ -68,28 +114,29 @@ angular.module('starter.controllers', [])
       }
     });
 })
-.controller('SynonymousCtrl', function($scope, $http, $sce, $ionicLoading, $compile, $ionicPopup, $timeout, serveInclude, serveData) {
+.controller('SynonymousCtrl', function($scope, $http, $sce, $ionicLoading, $compile, $ionicPopup, $timeout, serveInclude, serveData, serveLogin) {
   var page = angular.element(document.getElementById('contenedor'));
   var card = document.createElement('div');
   var words = [];
   var vocabularyLength = 0;
   var matrix = [];
   var times = 0;
-  var score = 0;
-  var gameDone = false;
+  var maxScore = 40;
+  $scope.score = 0;
+  var successfulGame = false;
   $scope.timer = 100;
   (function update() {
     //$timeout(update, 1000 * 5); 5 segundos
     //$timeout(update, 1000); 1 segundo
-    if(!gameDone){
+    if(!successfulGame){
       if($scope.timer<=0){
         $scope.gameOverForTime();
       }else{
         $timeout(update, 1000);
         $scope.timer -= 1;
+        document.getElementById('timer').className = 'col three-dimensions d-normal';
       }
     }
-    
   }());
   $scope.show = function() {
     $ionicLoading.show({
@@ -109,7 +156,7 @@ angular.module('starter.controllers', [])
     }
   };
   $scope.pasarNivel= function(id){
-    if(gameDone){
+    if(successfulGame){
       serveData.setLastLevel(id);
     }
   };
@@ -120,50 +167,54 @@ angular.module('starter.controllers', [])
   $scope.itemSelected= function(id){
     times++;
     if($scope.id==id){
-      score += 10;
+      $scope.score += 10;
       if(vocabularyLength>0 && times<10){
-        $scope.showAlertPopUp('Muy Bien', null);
+        //$scope.showAlertPopUp('Muy Bien', null);
+        document.getElementById('timer').className = 'col three-dimensions d-focus';
+        $scope.timer +=2;
+        //$scope.timer = 20;
         $scope.showGame();
       }else{
         if(times>=10){
-          $scope.showAlertPopUp('Fallaste', 'Se ha terminado el minijuego');
+          //$scope.showAlertPopUp('Fallaste', 'Se ha terminado el minijuego');
         }else{
-          $scope.showAlertPopUp('Muy Bien', 'Se acabaron las palabras');
+          //$scope.showAlertPopUp('Muy Bien', 'Se acabaron las palabras');
         }
-        gameDone = true;
+        successfulGame = true;
         $scope.setScore();
       }
     }else{
-      score -= 2;
+      $scope.score -= 2;
       if(vocabularyLength>0 && times<10){
-        $scope.showAlertPopUp('Fallaste, intenta en la siguiente', null);
+        //$scope.showAlertPopUp('Fallaste, intenta en la siguiente', null);
+        //$scope.timer=20;
         $scope.showGame();
       }else{
         if(times>=10){
-          $scope.showAlertPopUp('Fallaste', 'Se ha terminado el minijuego');
+          //$scope.showAlertPopUp('Fallaste', 'Se ha terminado el minijuego');
         }else{
-          $scope.showAlertPopUp('Fallaste', 'Se acabaron las palabras');
+          //$scope.showAlertPopUp('Fallaste', 'Se acabaron las palabras');
         }
-        gameDone = true;
+        successfulGame = true;
         $scope.setScore();
       }
     }
   };
   $scope.setScore = function(){
     //stop timer
-    var recount = '<div >'+
+    var userArray = serveLogin.getUser();
+    var recount = '<div class="d-card">'+
+                    '<div  id="divIcon" class=" d-corner d-corner-off"><i class="icon ion-android-star energized"></i></div>'+
                     '<div class="list card">'+
                       '<div class="item item-avatar">'+
                        '<img src="img/FUUU.png">'+
-                        '<h2>Usuario</h2>'+
+                        '<h2>'+userArray[1]+'</h2>'+
                         '<p>Sinonimos</p>'+
                       '</div>'+
                       '<div class="item">'+
-                        '<span><b>Puntaje: </b></span>'+
-                        '<span>'+score+'pts</span>'+
-                        '<span><b>Extra: </b></span>'+
-                        '<span>'+2+'pts</span>'+
-                        '<h2>'+(score+2)+'pts</h2>'+
+                        '<i class="icon ion-social-usd">&nbsp; {{score}}</i>'+
+                        '<br/>'+
+                        '<i class="icon ion-clock">&nbsp;Extra:&nbsp; '+parseInt($scope.timer*0.1)+'</i>'+
                       '</div>'+
                       '<a class="item item-icon-right positive" ui-sref="app.levels" ng-click="pasarNivel('+serveInclude.getNextPage()+')" >'+
                         'Continuar'+
@@ -175,12 +226,14 @@ angular.module('starter.controllers', [])
         var scoreHTML = card.innerHTML = $compile(recount)($scope);
         page.empty();
         page.append(scoreHTML);
+        document.getElementById('divIcon').className = 'd-corner d-corner-off';
+        if($scope.score == maxScore){
+          document.getElementById('divIcon').className = 'd-corner d-corner-down';
+        }
   };
-
   $scope.hide = function(){
         $ionicLoading.hide();
   };
-
   $scope.loadBefore = function() {
     // Start showing the progress
     $scope.show($ionicLoading);
@@ -206,7 +259,7 @@ angular.module('starter.controllers', [])
                   if($scope.showGame()==true){
                     $scope.hide($ionicLoading);  
                     $scope.showAlertPopUp('Iniciar juego', 'Preparate!');
-                    $scope.timer=20;
+                    $scope.timer=100;
                   }else{
                     $scope.hide($ionicLoading); 
                     $scope.showAlertPopUp('Ha ocurrido un error', 'porfavor, vuelve a cargar el minijuego');

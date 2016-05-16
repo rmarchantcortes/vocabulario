@@ -1,18 +1,20 @@
 <ion-view view-title="Playlist">
   <ion-content>
-    <div >
-    	<div class="list card">
+    <div class="d-card">
+    	<div class=" d-corner d-corner-off"><i class="icon ion-android-star energized"></i></div>
+    	<div class="list card ">
+    	
 		  <div class="item item-avatar">
+
 		    <img src="img/FUUU.png">
 		    <h2>Usuario</h2>
 		    <p>Sinonimos</p>
 		  </div>
+
 		  <div class="item">
-		    <span><b>Puntaje: </b></span>
-		    <span>25pts</span>
-		    <span><b>Extra: </b></span>
-		    <span>2pts</span>
-		    <h2>27pts</h2>
+		    <i class="icon ion-social-usd-outline">&nbsp; {{score}}</i>
+		    <br/>
+		    <i class="icon ion-clock">Extra:&nbsp; {{timer}} </i>
 		  </div>
 		  <!--ui-sref="app.levels"-->
 		  <a class="item item-icon-right positive" ui-sref="app.levels" ng-click="pasarNivel()" >

@@ -61,6 +61,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     })
     .state('app.synonymous', {
     url: '/synonymous',
+    cache: false,
     views: {
       'menuContent': {
         templateUrl: 'templates/synonymous.html',
