@@ -1,5 +1,88 @@
 angular.module('starter.controllers', [])
-.controller('DescargasCtrl', function($scope, $http, $sce) {
+.controller('DescargasCtrl', function($scope, $sce, $http, $ionicPopup, $ionicLoading, $ionicModal, $timeout, serveLogin) {
+ 
+  $scope.loginData = {};
+
+  // Create the login modal that we will use later
+  $ionicModal.fromTemplateUrl('templates/login.html', {
+    scope: $scope
+  }).then(function(modal) {
+    $scope.modal = modal;
+  });
+
+  // Triggered in the login modal to close it
+  $scope.closeLogin = function() {
+    $scope.modal.hide();
+  };
+
+  // Open the login modal
+  $scope.login = function() {
+    $scope.modal.show();
+  };
+
+  $scope.show = function() {
+    $ionicLoading.show({
+      template: '<p>Loading...</p><ion-spinner></ion-spinner>'
+    });
+  };
+  $scope.hide = function(){
+        $ionicLoading.hide();
+  };
+  // Perform the login action when the user submits the login form
+  $scope.doLogin = function() {
+    console.log('Doing login', $scope.loginData);
+    //screen.lockOrientation('portrait');
+    // Simulate a login delay. Remove this and replace with your login
+    // code if using a login system
+    $scope.user = {
+      username : '',
+      password : ''
+    };
+    var entity = $scope.user;
+    var objJSON = JSON.stringify($scope.loginData);
+
+    $scope.show($ionicLoading);
+    // Do the call to a service using $http or directly do the call here
+    var urlCompleta ="http://www.vocabulario.esy.es/persistirLoginService.php";
+    var postUrl = $sce.trustAsResourceUrl(urlCompleta);
+    console.log(objJSON);
+    $http.post(postUrl, objJSON)
+    .then(
+    function (response) {
+                  $scope.exist = response.data;
+                  console.log($scope.exist);
+                  $scope.hide($ionicLoading);  
+                  if($scope.exist.length > 0){
+                    serveLogin.setUser($scope.exist[0].id,$scope.exist[0].nombre,$scope.exist[0].apellido);
+                    var alertPopup = $ionicPopup.alert({
+                        title: 'Saludos '+$scope.exist[0].nombre
+                    });
+                  }else{
+                    var alertPopup = $ionicPopup.alert({
+                        title: 'Usuario no encontrado'
+                    });
+                  }
+                  $scope.closeLogin();
+                },
+                function (){
+                  $scope.hide($ionicLoading);  
+                  var alertPopup = $ionicPopup.alert({
+                        title: 'error al intentar obtener tus datos'
+                    });
+                  $scope.closeLogin();
+                }
+    );
+    /*$timeout(function() {
+      $scope.closeLogin();
+    }, 1000);*/
+  };
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
   console.log("descarga");
   var defaultHTTPHeaders = {
     'Content-Type': 'application/json',
@@ -48,18 +131,26 @@ angular.module('starter.controllers', [])
         
       },
       function (){
-        alert('Error al importar el contenido');
+        console.log('error al importar contenido');
       }
       );
   };
 })
-.controller('DashCtrl', function($scope) {
+.controller('DashCtrl', function($scope, serveLogin) {
 /*var client = mysql.createClient({
   host:'mysql.hostinger.es',
   user:'u295276529_conte',
   password:'chanchan92',
 });
 client.database = 'u295276529_conte';*/
+console.log("tabs");
+$scope.myFunctionName = function(){
+    if (serveLogin.isLogin()) {
+     return "ng-show";
+    } else {
+     return "ng-hide";
+    }
+}
 
 })
 .controller('OrganizationsCtrl', function($scope, $http, $sce, productService) {
@@ -156,9 +247,21 @@ client.database = 'u295276529_conte';*/
     );
 })
 
-.controller('AccountCtrl', function($scope) {
+.controller('AccountCtrl', function($scope, serveLogin) {
   console.log("account");
-  $scope.settings = {
-    enableFriends: true
-  };
+  $scope.user = serveLogin.getUser();
+  console.log($scope.user);
+  var div_account = document.getElementById('account-page');
+  var img_account = document.getElementById('account-img');
+
+  if(serveLogin.isLogin()){
+    console.log("if");
+    img_account.style.visibility = "hidden";
+    div_account.style.visibility = "visible";
+  }else{
+    console.log("else");
+    img_account.style.visibility = "visible";
+    div_account.style.visibility = "hidden";
+
+  }
 });
