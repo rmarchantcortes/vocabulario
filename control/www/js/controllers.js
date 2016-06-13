@@ -91,6 +91,16 @@ angular.module('starter.controllers', [])
 
   $http.defaults.headers.post =defaultHTTPHeaders;
   $scope.listOfOptions = ['Nombre', 'Asignatura', 'Fecha'];
+
+/*  $scope.show = function() {
+    $ionicLoading.show({
+      template: '<p>Loading...</p><ion-spinner></ion-spinner>'
+    });
+  };
+  $scope.hide = function(){
+        $ionicLoading.hide();
+  };*/
+  $scope.show($ionicLoading);
   $scope.ordenarDescarga = function(selectedItem){
     var urlCompleta = 'http://www.vocabulario.esy.es/persistirDescargasService.php';
     var postUrl = $sce.trustAsResourceUrl(urlCompleta);
@@ -99,6 +109,7 @@ angular.module('starter.controllers', [])
     .then(
       function (success) {
         datos=success.data;
+        $scope.hide($ionicLoading);  
         console.log(datos);
         //datos.sort(nombre);
         if(selectedItem=="Asignatura"){
@@ -131,6 +142,7 @@ angular.module('starter.controllers', [])
         
       },
       function (){
+        $scope.hide($ionicLoading);  
         console.log('error al importar contenido');
       }
       );
@@ -153,7 +165,7 @@ $scope.myFunctionName = function(){
 }
 
 })
-.controller('OrganizationsCtrl', function($scope, $http, $sce, productService) {
+.controller('OrganizationsCtrl', function($scope, $http, $sce, $ionicPopup, $ionicLoading, productService) {
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
   // To listen for when this page is active (for example, to refresh data),
@@ -161,6 +173,15 @@ $scope.myFunctionName = function(){
   //http://www.vocabulario.esy.es/persistirOrganizationsService.php
   //$scope.$on('$ionicView.enter', function(e) {
   //});
+  $scope.show = function() {
+    $ionicLoading.show({
+      template: '<p>Loading...</p><ion-spinner></ion-spinner>'
+    });
+  };
+  $scope.hide = function(){
+        $ionicLoading.hide();
+  };
+  $scope.show($ionicLoading);
     $scope.callToAddToOrganizationList = function(idObj, nameObj){
         productService.addOrganization(idObj, nameObj);
     };
@@ -171,10 +192,12 @@ $scope.myFunctionName = function(){
     function (response) {
                   console.log(response.data);
                   $scope.organizations = response.data;
+                  $scope.hide($ionicLoading); 
 
                 },
                 function (){
-        alert('Error al importar las organizaciones');
+                  console.log('error al importar los datos');
+        $scope.hide($ionicLoading); 
       }
                 );
 
@@ -186,10 +209,18 @@ $scope.myFunctionName = function(){
   };*/
 })
 
-.controller('ClassCtrl', function($scope, $http, $sce, productService) {
+.controller('ClassCtrl', function($scope, $http, $sce, $ionicPopup, $ionicLoading, productService) {
   var defaultHTTPHeaders = {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
+  };
+  $scope.show = function() {
+    $ionicLoading.show({
+      template: '<p>Loading...</p><ion-spinner></ion-spinner>'
+    });
+  };
+  $scope.hide = function(){
+        $ionicLoading.hide();
   };
   $scope.callToAddToClassList = function(idObj, nameObj){
         productService.addClass(idObj, nameObj);
@@ -206,24 +237,34 @@ $scope.myFunctionName = function(){
 
     var urlCompleta ="http://www.vocabulario.esy.es/persistirClassService.php";
     var postUrl = $sce.trustAsResourceUrl(urlCompleta);
+    $scope.show($ionicLoading);
     $http.post(postUrl, $scope.curso)
     .then(
     function (response) {
                   console.log(response.data);
                   $scope.cursos = response.data;
+                  $scope.hide($ionicLoading);  
                 },
                 function (){
-                  alert('Error al importar los Establecimientos');
+                  $scope.hide($ionicLoading);  
+                  console.log('Error al importar los Establecimientos');
                 }
     );
 })
 
-.controller('StudentCtrl', function($scope, $http, $sce, productService) {
+.controller('StudentCtrl', function($scope, $http, $sce, $ionicPopup, $ionicLoading, productService) {
   var defaultHTTPHeaders = {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
   };
-
+  $scope.show = function() {
+    $ionicLoading.show({
+      template: '<p>Loading...</p><ion-spinner></ion-spinner>'
+    });
+  };
+  $scope.hide = function(){
+        $ionicLoading.hide();
+  };
   $http.defaults.headers.post =defaultHTTPHeaders;
   $scope.Class = productService.getClass();
   console.log($scope.Class);
@@ -235,14 +276,17 @@ $scope.myFunctionName = function(){
   };
     var urlCompleta ="http://www.vocabulario.esy.es/persistirStudentService.php";
     var postUrl = $sce.trustAsResourceUrl(urlCompleta);
+    $scope.show($ionicLoading);
     $http.post(postUrl, $scope.estudiante)
     .then(
     function (response) {
                   console.log(response.data);
                   $scope.alumnos = response.data;
+                  $scope.hide($ionicLoading); 
                 },
                 function (){
-                  alert('Error al importar las organizaciones');
+                  $scope.hide($ionicLoading); 
+                  console.log('Error al importar las organizaciones');
                 }
     );
 })

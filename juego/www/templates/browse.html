@@ -1,5 +1,31 @@
 <ion-view view-title="Browse">
   <ion-content>
-    <h1>Browse</h1>
+    <div class="list">
+      <label class="item item-input item-select">
+	    <div class="input-label">
+	      Nivel: 
+	    </div>
+	    <select id="combo" ng-model="selectedLvl" ng-options="option.title for option in selectOptions"></select>
+	  </label>
+		     
+	  <div id="time" class="item range range-energized">
+	  	  <i class="icon ion-ios-stopwatch-outline"></i>
+		  <input type="range" name="time" ng-model="data.time" min="0" max="60">
+		  <i class="icon ion-ios-stopwatch"></i>
+	  </div>
+	  <label class="item item-input item-select">
+	    <div class="input-label">
+	      Establecimiento: 
+	    </div>
+	    <select id="combo" ng-model="selectedOrg"  ng-options="option.nombre for option in organizations" ng-change="callToAddToOrganizationList(option.id, option.nombre)"></select>
+	  </label>
+	  <label class="item item-input item-select">
+	    <div class="input-label">
+	      Curso: 
+	    </div>
+	    <select id="combo" ng-model="selectedCourse" ng-options="option.nombre for option in courses" disabled></select>
+	  </label>
+	  <button class="button button-full icon-left ion-checkmark-circled button-positive">Crear desafio</button>
+	</div>
   </ion-content>
 </ion-view>

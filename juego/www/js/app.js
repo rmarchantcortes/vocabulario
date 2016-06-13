@@ -45,7 +45,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       url: '/browse',
       views: {
         'menuContent': {
-          templateUrl: 'templates/browse.html'
+          templateUrl: 'templates/browse.html',
+          controller: 'challengeCtrl'
         }
       }
     })
@@ -66,6 +67,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       'menuContent': {
         templateUrl: 'templates/synonymous.html',
         controller: 'SynonymousCtrl'
+      }
+    }
+  })
+    .state('app.synonymousAntonym', {
+    url: '/synonymousAntonym',
+    cache: false,
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/synonymousAntonym.html',
+        controller: 'synonymousAntonymCtrl'
       }
     }
   })

@@ -1,8 +1,6 @@
 
 angular.module('starter.services', [])
-.factory('serveData', function() {
 
-})
 .service('serveLogin', function() {
   var User=0;
   var idPerson = -1;
@@ -33,6 +31,35 @@ angular.module('starter.services', [])
     isLogin: isLogin,
     setUser: setUser,
     getUser: getUser
+  };
+
+})
+.service('productService', function() {
+  var productList = [];
+  var ClassList = [];
+  var addOrganization = function(idObj, nameObj) {
+      productList = [];
+      productList.push(idObj);
+      productList.push(nameObj);
+  };
+
+  var getOrganization = function(){
+      return productList;
+  };
+  var addClass = function(idObj, nameObj) {
+      ClassList = [];
+      ClassList.push(idObj);
+      ClassList.push(nameObj);
+  };
+
+  var getClass = function(){
+      return ClassList;
+  };
+  return {
+    addOrganization: addOrganization,
+    getOrganization: getOrganization,
+    addClass: addClass,
+    getClass: getClass
   };
 
 })
