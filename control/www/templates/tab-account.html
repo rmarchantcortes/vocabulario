@@ -1,21 +1,19 @@
 <ion-view view-title="Account">
-  <ion-content>
-
-      <div id="account-page" class="line" >
+  <ion-content class="padding">
+      <div ng-show="accountIsVisible">
+        <img class="full-screen" src="/img/default.jpg">
+        <button class="button button-block button-positive" ng-click="login()">Iniciar Sesion</button>
+      </div>
+      <div  ng-show="pageIsVisible" class="line">
         <ion-card>
-			<ion-item class="item-avatar">
-				<img src="#"  onerror="this.src='/img/default.jpg'"/>
-				<h2>{{user[1]}}</h2>
-				<p>{{user[2]}}</p>
-				<p>...</p>
-				<button>Editar</button>
-			</ion-item>
-		</ion-card>
+    			<ion-item class="item-avatar">
+    				<img src="#"  onerror="this.src='/img/default.jpg'"/>
+    				<h2>{{user[1]}}</h2>
+    				<p>{{user[2]}}</p>
+    				<p>...</p>
+    				<button ng-click="editPerson()">Editar</button>
+    			</ion-item>
+    		</ion-card>
       </div>
-      <div id="account-img">
-      	<img class="full-screen" src="http://www.vocvo.be/sites/default/files/Vacature_3_0.gif">
-      	<h4>Porfavor <br>Inicia sesión en el menú de ajustes (<i class="icon ion-navicon-round"></i>)</h4>
-      </div>
-        
   </ion-content>
 </ion-view>

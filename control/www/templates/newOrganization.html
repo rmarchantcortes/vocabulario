@@ -1,0 +1,27 @@
+<ion-modal-view>
+  <ion-header-bar>
+    <h1 class="title">Agregar Establecimiento</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="closeNewOrganization()">Cerrar</button>
+    </div>
+  </ion-header-bar>
+  <ion-content>
+    <form ng-submit="createNewOrganization()">
+      <div class="list">
+        <label class="item item-input">
+          <span class="input-label">Nombre del Establecimiento</span>
+          <input type="text" ng-model="newOrganizationData.nombre">
+        </label>
+        <label class="item item-input item-select">
+        <div class="input-label">
+          Tipo de Establecimiento: 
+        </div>
+        <select id="combo" name="actibityForm" ng-model="newOrganizationData.tipo" ng-options="option.name as option.name for option in selectOptions"></select>
+      </label>
+        <label class="item">
+          <button class="button button-block button-positive" type="submit">Crear</button>
+        </label>
+      </div>
+    </form>
+  </ion-content>
+</ion-modal-view>

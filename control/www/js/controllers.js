@@ -1,23 +1,31 @@
 angular.module('starter.controllers', [])
-.controller('DescargasCtrl', function($scope, $sce, $http, $ionicPopup, $ionicLoading, $ionicModal, $timeout, serveLogin) {
- 
+.controller('DescargasCtrl', function($scope, $sce, $http, $state,  $ionicPopup, $window, $ionicLoading, $ionicModal, $timeout, serveLogin) {
+ $scope.user = serveLogin.getUser();
+  console.log($scope.user);
+ if(serveLogin.isLogin()){
+    $scope.accountIsVisible = false;
+    $scope.pageIsVisible = true;
+  }else{
+    $scope.accountIsVisible = true;
+    $scope.pageIsVisible = false;
+  }
   $scope.loginData = {};
 
-  // Create the login modal that we will use later
+  // Create the login modalLogin that we will use later
   $ionicModal.fromTemplateUrl('templates/login.html', {
     scope: $scope
-  }).then(function(modal) {
-    $scope.modal = modal;
+  }).then(function(modalLogin) {
+    $scope.modalLogin = modalLogin;
   });
 
-  // Triggered in the login modal to close it
+  // Triggered in the login modalLogin to close it
   $scope.closeLogin = function() {
-    $scope.modal.hide();
+    $scope.modalLogin.hide();
   };
 
-  // Open the login modal
+  // Open the login modalLogin
   $scope.login = function() {
-    $scope.modal.show();
+    $scope.modalLogin.show();
   };
 
   $scope.show = function() {
@@ -63,6 +71,7 @@ angular.module('starter.controllers', [])
                     });
                   }
                   $scope.closeLogin();
+                  $state.go($state.current, {}, {reload: true});
                 },
                 function (){
                   $scope.hide($ionicLoading);  
@@ -70,6 +79,7 @@ angular.module('starter.controllers', [])
                         title: 'error al intentar obtener tus datos'
                     });
                   $scope.closeLogin();
+
                 }
     );
     /*$timeout(function() {
@@ -165,7 +175,7 @@ $scope.myFunctionName = function(){
 }
 
 })
-.controller('OrganizationsCtrl', function($scope, $http, $sce, $ionicPopup, $ionicLoading, productService) {
+.controller('OrganizationsCtrl', function($scope, $sce, $http, $ionicPopup, $state, $ionicLoading, $ionicModal, $timeout, productService, serveLogin) {
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
   // To listen for when this page is active (for example, to refresh data),
@@ -173,21 +183,38 @@ $scope.myFunctionName = function(){
   //http://www.vocabulario.esy.es/persistirOrganizationsService.php
   //$scope.$on('$ionicView.enter', function(e) {
   //});
-  $scope.show = function() {
-    $ionicLoading.show({
-      template: '<p>Loading...</p><ion-spinner></ion-spinner>'
-    });
+  $scope.selectOptions =[
+    { id: 1 , name: 'Colegio'},
+    { id: 2 , name: 'Instituto'},
+    { id: 3 , name: 'CFT'},
+    { id: 4 , name: 'Preuniversitario'},
+    { id: 5 , name: 'Universidad'}];
+    $scope.dataForm = {};
+  $ionicModal.fromTemplateUrl('templates/newOrganization.html', {
+    scope: $scope
+  }).then(function(modalNewOrganization) {
+    $scope.modalNewOrganization = modalNewOrganization;
+  });
+  $scope.user = serveLogin.getUser();
+  console.log($scope.user);
+  console.log(serveLogin.getUser()[0]);
+   $scope.organization = {
+    nombre : '',
+    tipo: '',
+    id_persona : serveLogin.getUser()[0]
   };
-  $scope.hide = function(){
-        $ionicLoading.hide();
-  };
-  $scope.show($ionicLoading);
-    $scope.callToAddToOrganizationList = function(idObj, nameObj){
-        productService.addOrganization(idObj, nameObj);
-    };
-    var urlCompleta ="http://www.vocabulario.esy.es/persistirOrganizationsService.php";
+  
+ if(serveLogin.isLogin()){
+    $scope.accountIsVisible = false;
+    $scope.pageIsVisible = true;
+    
+  }else{
+    $scope.accountIsVisible = true;
+    $scope.pageIsVisible = false;
+  }
+  var urlCompleta ="http://www.vocabulario.esy.es/persistirOrganizationsService.php";
     var postUrl = $sce.trustAsResourceUrl(urlCompleta);
-    $http.post(postUrl)
+    $http.post(postUrl, $scope.organization)
     .then(
     function (response) {
                   console.log(response.data);
@@ -199,9 +226,125 @@ $scope.myFunctionName = function(){
                   console.log('error al importar los datos');
         $scope.hide($ionicLoading); 
       }
-                );
+    );
+  $scope.loginData = {};
+  $scope.newOrganizationData = {'id_persona': serveLogin.getUser()[0]};
 
+  // Create the login modalLogin that we will use later
+  $ionicModal.fromTemplateUrl('templates/login.html', {
+    scope: $scope
+  }).then(function(modalLogin) {
+    $scope.modalLogin = modalLogin;
+  });
 
+  $scope.newOrganization = function(){
+    $scope.modalNewOrganization.show();
+  };
+  $scope.closeNewOrganization = function() {
+    $scope.modalNewOrganization.hide();
+  };
+  $scope.createNewOrganization = function() {
+    console.log('Doing new organization', $scope.newOrganizationData);
+    $scope.addNewOrganization = {username : '', password : ''};
+    var entity = $scope.user;
+    var objJSON = JSON.stringify($scope.newOrganizationData);
+    // Do the call to a service using $http or directly do the call here
+    var urlCompleta ="http://www.vocabulario.esy.es/InsertNewOrganizationService.php";
+    var postUrl = $sce.trustAsResourceUrl(urlCompleta);
+    console.log(objJSON);
+    $http.post(postUrl, objJSON)
+    .then(
+    function (response) {
+                  $scope.exist = response.data;
+                  console.log($scope.exist);
+                  $scope.hide($ionicLoading);  
+                  $scope.closeNewOrganization();
+                  $state.go($state.current, {}, {reload: true});
+                },
+                function (){
+                  $scope.hide($ionicLoading);  
+                  var alertPopup = $ionicPopup.alert({
+                        title: 'error al intentar obtener tus datos'
+                  });
+                  $scope.closeLogin();
+                }
+    );
+  }
+  // Triggered in the login modalLogin to close it
+  $scope.closeLogin = function() {
+    $scope.modalLogin.hide();
+  };
+
+  // Open the login modalLogin
+  $scope.login = function() {
+    $scope.modalLogin.show();
+  };
+
+  $scope.show = function() {
+    $ionicLoading.show({
+      template: '<p>Loading...</p><ion-spinner></ion-spinner>'
+    });
+  };
+  $scope.hide = function(){
+        $ionicLoading.hide();
+  };
+  function sendData($scope) {
+    
+  }
+  $scope.show($ionicLoading);
+  // Perform the login action when the user submits the login form
+  $scope.doLogin = function() {
+    console.log('Doing login', $scope.loginData);
+    //screen.lockOrientation('portrait');
+    // Simulate a login delay. Remove this and replace with your login
+    // code if using a login system
+    $scope.user = {
+      username : '',
+      password : ''
+    };
+    var entity = $scope.user;
+    var objJSON = JSON.stringify($scope.loginData);
+
+    
+    // Do the call to a service using $http or directly do the call here
+    var urlCompleta ="http://www.vocabulario.esy.es/persistirLoginService.php";
+    var postUrl = $sce.trustAsResourceUrl(urlCompleta);
+    console.log(objJSON);
+    $http.post(postUrl, objJSON)
+    .then(
+    function (response) {
+                  $scope.exist = response.data;
+                  console.log($scope.exist);
+                  $scope.hide($ionicLoading);  
+                  if($scope.exist.length > 0){
+                    serveLogin.setUser($scope.exist[0].id,$scope.exist[0].nombre,$scope.exist[0].apellido);
+                    var alertPopup = $ionicPopup.alert({
+                        title: 'Saludos '+$scope.exist[0].nombre
+
+                    });
+                  }else{
+                    var alertPopup = $ionicPopup.alert({
+                        title: 'Usuario no encontrado'
+                    });
+                  }
+
+                  $scope.closeLogin();
+                  $state.go($state.current, {}, {reload: true});
+                },
+                function (){
+                  $scope.hide($ionicLoading);  
+                  var alertPopup = $ionicPopup.alert({
+                        title: 'error al intentar obtener tus datos'
+                    });
+                  $scope.closeLogin();
+                }
+    );
+  }
+    $scope.callToAddToOrganizationList = function(idObj, nameObj){
+        productService.addOrganization(idObj, nameObj);
+    };
+    
+  
   
   /*$scope.organization = Organization.all();
   $scope.remove = function(organization) {
@@ -209,7 +352,52 @@ $scope.myFunctionName = function(){
   };*/
 })
 
-.controller('ClassCtrl', function($scope, $http, $sce, $ionicPopup, $ionicLoading, productService) {
+.controller('ClassCtrl', function($scope, $sce, $http, $ionicPopup, $state, $ionicLoading, $ionicModal, $timeout, productService) {
+   $scope.Organization = productService.getOrganization();
+   $scope.selectOptions =[
+    { id: 1 , name: 'Primero Medio'},
+    { id: 2 , name: 'Segundo Medio'},
+    { id: 3 , name: 'Tercero Medio'},
+    { id: 4 , name: 'Cuarto Medio'}];
+    $scope.dataForm = {};
+  $ionicModal.fromTemplateUrl('templates/newCourse.html', {
+    scope: $scope
+  }).then(function(modalNewCourse) {
+    $scope.modalNewCourse = modalNewCourse;
+  });
+  $scope.newCourseData = {'id_organizacion': $scope.Organization[0]};
+  $scope.newCourse = function(){
+    $scope.modalNewCourse.show();
+  };
+  $scope.closeNewCourse = function() {
+    $scope.modalNewCourse.hide();
+  };
+  $scope.createNewCourse = function() {
+    console.log('Doing new Course', $scope.newCourseData);
+    var entity = $scope.user;
+    var objJSON = JSON.stringify($scope.newCourseData);
+    // Do the call to a service using $http or directly do the call here
+    var urlCompleta ="http://www.vocabulario.esy.es/InsertNewCourseService.php";
+    var postUrl = $sce.trustAsResourceUrl(urlCompleta);
+    console.log(objJSON);
+    $http.post(postUrl, objJSON)
+    .then(
+    function (response) {
+                  $scope.exist = response.data;
+                  console.log($scope.exist);
+                  $scope.hide($ionicLoading);  
+                  $scope.closeNewCourse();
+                  $state.go($state.current, {}, {reload: true});
+                },
+                function (){
+                  $scope.hide($ionicLoading);  
+                  var alertPopup = $ionicPopup.alert({
+                        title: 'error al intentar obtener tus datos'
+                  });
+                  $scope.closeNewCourse();
+                }
+    );
+  }
   var defaultHTTPHeaders = {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
@@ -227,7 +415,6 @@ $scope.myFunctionName = function(){
         console.log(idObj+"===="+nameObj);
     };
   $http.defaults.headers.post =defaultHTTPHeaders;
-  $scope.Organization = productService.getOrganization();
   console.log($scope.Organization);
   $scope.curso = {
     nombre : '',
@@ -252,7 +439,47 @@ $scope.myFunctionName = function(){
     );
 })
 
-.controller('StudentCtrl', function($scope, $http, $sce, $ionicPopup, $ionicLoading, productService) {
+.controller('StudentCtrl', function($scope, $sce, $http, $ionicPopup, $state, $ionicLoading, $ionicModal, $timeout, productService) {
+  $scope.Class = productService.getClass();
+  $scope.dataForm = {};
+  $ionicModal.fromTemplateUrl('templates/newStudent.html', {
+    scope: $scope
+  }).then(function(modalNewStudent) {
+    $scope.modalNewStudent = modalNewStudent;
+  });
+  $scope.newStudentData = {'id_curso': $scope.Class[0]};
+  $scope.newStudent = function(){
+    $scope.modalNewStudent.show();
+  };
+  $scope.closeNewStudent = function() {
+    $scope.modalNewStudent.hide();
+  };
+  $scope.createNewStudent = function() {
+    console.log('Doing new Student', $scope.newStudentData);
+    var entity = $scope.user;
+    var objJSON = JSON.stringify($scope.newStudentData);
+    // Do the call to a service using $http or directly do the call here
+    var urlCompleta ="http://www.vocabulario.esy.es/InsertNewStudentService.php";
+    var postUrl = $sce.trustAsResourceUrl(urlCompleta);
+    console.log(objJSON);
+    $http.post(postUrl, objJSON)
+    .then(
+    function (response) {
+                  $scope.exist = response.data;
+                  console.log($scope.exist);
+                  $scope.hide($ionicLoading);  
+                  $scope.closeNewStudent();
+                  $state.go($state.current, {}, {reload: true});
+                },
+                function (){
+                  $scope.hide($ionicLoading);  
+                  var alertPopup = $ionicPopup.alert({
+                        title: 'error al intentar obtener tus datos'
+                  });
+                  $scope.closeNewStudent();
+                }
+    );
+  }
   var defaultHTTPHeaders = {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
@@ -266,8 +493,7 @@ $scope.myFunctionName = function(){
         $ionicLoading.hide();
   };
   $http.defaults.headers.post =defaultHTTPHeaders;
-  $scope.Class = productService.getClass();
-  console.log($scope.Class);
+    console.log($scope.Class);
   $scope.estudiante = {
     nombre : '',
     apellido: '',
@@ -291,7 +517,7 @@ $scope.myFunctionName = function(){
     );
 })
 
-.controller('AccountCtrl', function($scope, serveLogin) {
+.controller('AccountCtrl', function($scope, $sce, $http, $ionicPopup, $state, $ionicLoading, $ionicModal, $timeout, serveLogin) {
   console.log("account");
   $scope.user = serveLogin.getUser();
   console.log($scope.user);
@@ -299,13 +525,124 @@ $scope.myFunctionName = function(){
   var img_account = document.getElementById('account-img');
 
   if(serveLogin.isLogin()){
-    console.log("if");
-    img_account.style.visibility = "hidden";
-    div_account.style.visibility = "visible";
+    $scope.accountIsVisible = false;
+    $scope.pageIsVisible = true;
   }else{
-    console.log("else");
-    img_account.style.visibility = "visible";
-    div_account.style.visibility = "hidden";
-
+    $scope.accountIsVisible = true;
+    $scope.pageIsVisible = false;
   }
+  $scope.loginData = {};
+    $scope.dataForm = {'id_persona' : $scope.user.id};
+  $ionicModal.fromTemplateUrl('templates/editPerson.html', {
+    scope: $scope
+  }).then(function(modalEditPerson) {
+    $scope.modalEditPerson = modalEditPerson;
+  });
+  $scope.editPersonData = {'id_persona': serveLogin.getUser()[0]};
+  console.log($scope.editPersonData);
+  $scope.editPerson = function(){
+    $scope.modalEditPerson.show();
+  };
+  $scope.closeEditPerson = function() {
+    $scope.modalEditPerson.hide();
+  };
+  $scope.createEditPerson = function() {
+    console.log('Doing Edit person', $scope.editPersonData);
+    var entity = $scope.user;
+    var objJSON = JSON.stringify($scope.editPersonData);
+    // Do the call to a service using $http or directly do the call here
+    var urlCompleta ="http://www.vocabulario.esy.es/UpdatePersonService.php";
+    var postUrl = $sce.trustAsResourceUrl(urlCompleta);
+    console.log(objJSON);
+    $http.post(postUrl, objJSON)
+    .then(
+    function (response) {
+                  $scope.exist = response.data;
+                  console.log($scope.exist);
+                  $scope.hide($ionicLoading);  
+                  $scope.closeEditPerson();
+                  $state.go($state.current, {}, {reload: true});
+                },
+                function (){
+                  $scope.hide($ionicLoading);  
+                  var alertPopup = $ionicPopup.alert({
+                        title: 'error al intentar obtener tus datos'
+                  });
+                  $scope.closeEditPerson();
+                }
+    );
+  }
+  // Create the login modalLogin that we will use later
+  $ionicModal.fromTemplateUrl('templates/login.html', {
+    scope: $scope
+  }).then(function(modalLogin) {
+    $scope.modalLogin = modalLogin;
+  });
+
+  // Triggered in the login modalLogin to close it
+  $scope.closeLogin = function() {
+    $scope.modalLogin.hide();
+  };
+
+  // Open the login modalLogin
+  $scope.login = function() {
+    $scope.modalLogin.show();
+  };
+
+  $scope.show = function() {
+    $ionicLoading.show({
+      template: '<p>Loading...</p><ion-spinner></ion-spinner>'
+    });
+  };
+  $scope.hide = function(){
+        $ionicLoading.hide();
+  };
+  // Perform the login action when the user submits the login form
+  $scope.doLogin = function() {
+    console.log('Doing login', $scope.loginData);
+    //screen.lockOrientation('portrait');
+    // Simulate a login delay. Remove this and replace with your login
+    // code if using a login system
+    $scope.user = {
+      username : '',
+      password : ''
+    };
+    var entity = $scope.user;
+    var objJSON = JSON.stringify($scope.loginData);
+
+    $scope.show($ionicLoading);
+    // Do the call to a service using $http or directly do the call here
+    var urlCompleta ="http://www.vocabulario.esy.es/persistirLoginService.php";
+    var postUrl = $sce.trustAsResourceUrl(urlCompleta);
+    console.log(objJSON);
+    $http.post(postUrl, objJSON)
+    .then(
+    function (response) {
+                  $scope.exist = response.data;
+                  console.log($scope.exist);
+                  $scope.hide($ionicLoading);  
+                  if($scope.exist.length > 0){
+                    serveLogin.setUser($scope.exist[0].id,$scope.exist[0].nombre,$scope.exist[0].apellido);
+                    var alertPopup = $ionicPopup.alert({
+                        title: 'Saludos '+$scope.exist[0].nombre
+                    });
+                  }else{
+                    var alertPopup = $ionicPopup.alert({
+                        title: 'Usuario no encontrado'
+                    });
+                  }
+                  $scope.closeLogin();
+                },
+                function (){
+                  $scope.hide($ionicLoading);  
+                  var alertPopup = $ionicPopup.alert({
+                        title: 'error al intentar obtener tus datos'
+                    });
+                  $scope.closeLogin();
+                }
+    );
+    /*$timeout(function() {
+      $scope.closeLogin();
+    }, 1000);*/
+  };
 });

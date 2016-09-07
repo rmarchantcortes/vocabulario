@@ -1,5 +1,18 @@
 <ion-view view-title="Establecimientos">
-  <ion-content>
+  <ion-nav-buttons side="right"  >
+    <button class="button" ng-show="pageIsVisible" ng-click="newOrganization()">
+      <i class="icon icon-left ion-plus-round"></i>
+      <i class="icon icon-left ion-university"></i>
+    </button>
+  </ion-nav-buttons>
+  <ion-content class="padding">
+    <div ng-show="accountIsVisible">
+      <div >
+        <img class="full-screen" src="/img/default.jpg">
+        <button class="button button-block button-positive" ng-click="login()">Iniciar Sesion</button>
+      </div>
+    </div>
+    <div id="organizations"  ng-show="pageIsVisible">
       <ion-list >
         <ion-item class="item-remove-animate item-avatar item-icon-right" ng-model="organization.id" ng-repeat="organization in organizations" ng-click="callToAddToOrganizationList(organization.id, organization.nombre)" href="#/tab/organizations/{{organization.id}}"  >
           <img ng-src="img/organizacion.png">
@@ -7,6 +20,8 @@
           <p>{{organization.tipo}}</p>
         </ion-item>
       </ion-list>
+    </div>
+      
       
 <!--ng-model="cursos.id_organización"-->
       <!--<ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="chat in chats" type="item-text-wrap" href="#/tab/chats/{{chat.id}}">

@@ -224,5 +224,10 @@ box-shadow: inset -10px 11px 13px 2px rgba(219,216,219,1);*/
 	font: normal 30px/normal "Passero One", Helvetica, sans-serif;
 	transition: all 0.05s ease;
 }
-
+label.labelDisabled, label.labelDisabled select{
+	background: #ccc;
+}
+label.labelEnabled, label.labelEnabled select{
+	background: #fff;
+}
 html { overflow:hidden; }

@@ -49,6 +49,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
   .state('tab.descargas', {
     url: '/descargas',
+    cache: false,
     views: {
       'tab-dash': {
         templateUrl: 'templates/tab-descargas.html',
@@ -59,6 +60,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
   .state('tab.organizations', {
       url: '/organizations',
+      cache: false,
       views: {
         'tab-chats': {
           templateUrl: 'templates/tab-organizations.html',

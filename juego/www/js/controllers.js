@@ -585,6 +585,8 @@ angular.module('starter.controllers', [])
   
 })
 .controller('challengeCtrl', function($scope, $sce, $rootScope, $http, $timeout, $state, serveData, productService) {
+  document.getElementById('spinCourse').style.visibility="hidden";
+  document.getElementById('lblCourse').className= "item item-input item-select labelDisabled";
   $scope.selectOptions =[
     { title: 'Nivel 1', id: 1 , name: 'title1', img: 'crayons.jpg', link: 'synonymous'},
     { title: 'Nivel 2', id: 2 , name: 'title2', img: 'libros.jpg', link: 'synonymous'},
@@ -596,7 +598,7 @@ angular.module('starter.controllers', [])
     $scope.selectedOrg;
     $scope.selectedCourse;
 
-    $scope.data = { 'time' : '20' };
+    $scope.dataForm = { 'time' : '20' };
 
      var timeoutId = null;
     
@@ -628,23 +630,37 @@ angular.module('starter.controllers', [])
             // Now load data from server 
         }, 100); 
    });
-    $scope.callToAddToOrganizationList = function(idObj, nameObj){
-        productService.addOrganization(idObj, nameObj);
-        console.log(idObj);
-        console.log(nameObj);
-        console.log($scope.selectedOrg);
-        /*var urlCompleta ="http://www.vocabulario.esy.es/persistirClassService.php";
+    $scope.callToAddToOrganizationList = function(Obj){
+        document.getElementById('spinCourse').style.visibility="visible";
+        document.getElementById('lblCourse').className= "item item-input item-select labelEnabled";
+        console.log(Obj);
+        productService.addOrganization(Obj.id, Obj.nombre);
+        console.log(Obj);
+        $scope.Organization = productService.getOrganization();
+          console.log($scope.Organization[0]);
+          $scope.curso = {
+            nombre : '',
+            nivel: '',
+            id_organizacion : $scope.Organization[0]
+          };
+        var urlCompleta ="http://www.vocabulario.esy.es/persistirClassService.php";
         var postUrl = $sce.trustAsResourceUrl(urlCompleta);
+        console.log($scope.curso);
         $http.post(postUrl, $scope.curso)
         .then(
         function (response) {
                       console.log(response.data);
                       $scope.courses = response.data;
+                      document.getElementById('spinCourse').style.visibility="hidden";
+                      document.getElementById('comboCourse').disabled=false;
                     },
                     function (){
                       console.log('Error al importar los Cursos');
+                      $scope.callToAddToOrganizationList(Obj);
                     }
-        );*/
+        );
+
+        document.getElementById('comboCourse').disabled = false;
     };
     var urlCompleta ="http://www.vocabulario.esy.es/persistirOrganizationsService.php";
     var postUrl = $sce.trustAsResourceUrl(urlCompleta);
@@ -653,6 +669,11 @@ angular.module('starter.controllers', [])
     function (response) {
                   console.log(response.data);
                   $scope.organizations = response.data;
+                  
+                  document.getElementById('spinOrganizations').style.visibility="hidden";
+                  document.getElementById('comboOrganizations').disabled=false;
+
+                  console.log(document.getElementById('comboOrganizations').className);
                   /*$scope.hide($ionicLoading); */
 
                 },
@@ -661,7 +682,9 @@ angular.module('starter.controllers', [])
         /*$scope.hide($ionicLoading); */
       }
                 );
-
+    $scope.createActibity = function(data){
+      console.log(data);
+    }
   $scope.Organization = productService.getOrganization();
   console.log($scope.Organization);
   $scope.curso = {

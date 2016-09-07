@@ -1,22 +1,27 @@
 
 	<ion-view view-title="Descargas">
-	<ion-nav-buttons side="left">
-        <button class="button button-icon icon ion-navicon" ng-click="login()">
-        </button>
-    </ion-nav-buttons>
+		<span id="user"></span>
 	  	<ion-content class="padding">
-	  		<div class="list" ng-init="ordenarDescarga()">
-			  <label class="item item-input item-select">
-			    <div class="input-label">
-			     Ordenar por:
-			    </div>
-			    <select id="combo" ng-model="selectedItem" ng-options="option for option in listOfOptions" ng-change="ordenarDescarga(selectedItem)">
-			    </select>
+	  		<div ng-show="accountIsVisible">
+		      <div id="account-img">
+		        <img class="full-screen" src="/img/default.jpg">
+		        <button class="button button-block button-positive" ng-click="login()">Iniciar Sesion</button>
+		      </div>
+		    </div>
+		    <div  ng-show="pageIsVisible">
+		    	<div class="list" ng-init="ordenarDescarga()">
+				  <label class="item item-input item-select">
+				    <div class="input-label">
+				     Ordenar por:
+				    </div>
+				    <select id="combo" ng-model="selectedItem" ng-options="option for option in listOfOptions" ng-change="ordenarDescarga(selectedItem)">
+				    </select>
 
-			  </label>
-			  <div id="contenedor">
-			    	
-			    </div>
+				  </label>
+				  <div id="contenedor">
+				    	
+				    </div>
+				</div>
 			</div>
 	  	</ion-content>
   	</ion-view>
