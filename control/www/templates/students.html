@@ -7,7 +7,8 @@
   </ion-nav-buttons>
   <ion-content>
       <ion-list >
-        <ion-item class="item-remove-animate item-avatar item-icon-right"  ng-repeat="alumno in alumnos">
+        <ion-item class="item-remove-animate item-avatar item-icon-right"  ng-repeat="alumno in alumnos" href="#/tab/organizations/{{organization.id}}/{{curso.id}}/{{alumno.id}}"
+        ng-click="callToAddToStudentList(alumno.id, alumno.nombre)">
           <img ng-src="img/default.jpg">
           <h2>{{alumno.nombre}}</h2>
           <p>{{alumno.apellido}}</p>

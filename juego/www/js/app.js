@@ -43,6 +43,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
   .state('app.browse', {
       url: '/browse',
+      cache: false,
       views: {
         'menuContent': {
           templateUrl: 'templates/browse.html',

@@ -1,34 +1,22 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $sce, $http, $ionicPopup, $ionicLoading, $ionicModal, $timeout, serveLogin) {
-
-  // With the new view caching in Ionic, Controllers are only called
-  // when they are recreated or on app start, instead of every page change.
-  // To listen for when this page is active (for example, to refresh data),
-  // listen for the $ionicView.enter event:
-  //$scope.$on('$ionicView.enter', function(e) {
-  //});
-
-  // Form data for the login modal
+.controller('AppCtrl', function($scope, $sce, $http, $state, $ionicPopup, $ionicLoading, $ionicModal, $timeout, serveLogin) {
+  $scope.user = serveLogin.getUser();
   $scope.loginData = {};
-
-  // Create the login modal that we will use later
+  // Create the login modalLogin that we will use later
   $ionicModal.fromTemplateUrl('templates/login.html', {
     scope: $scope
-  }).then(function(modal) {
-    $scope.modal = modal;
+  }).then(function(modalLogin) {
+    $scope.modalLogin = modalLogin;
   });
-
-  // Triggered in the login modal to close it
+  // Triggered in the login modalLogin to close it
   $scope.closeLogin = function() {
-    $scope.modal.hide();
+    $scope.modalLogin.hide();
   };
-
-  // Open the login modal
+  // Open the login modalLogin
   $scope.login = function() {
-    $scope.modal.show();
+    $scope.modalLogin.show();
   };
-
   $scope.show = function() {
     $ionicLoading.show({
       template: '<p>Loading...</p><ion-spinner></ion-spinner>'
@@ -40,9 +28,6 @@ angular.module('starter.controllers', [])
   // Perform the login action when the user submits the login form
   $scope.doLogin = function() {
     console.log('Doing login', $scope.loginData);
-    //screen.lockOrientation('portrait');
-    // Simulate a login delay. Remove this and replace with your login
-    // code if using a login system
     $scope.user = {
       username : '',
       password : ''
@@ -62,7 +47,7 @@ angular.module('starter.controllers', [])
                   console.log($scope.exist);
                   $scope.hide($ionicLoading);  
                   if($scope.exist.length > 0){
-                    serveLogin.setUser($scope.exist[0].id,$scope.exist[0].nombre,$scope.exist[0].apellido);
+                    serveLogin.setUser($scope.exist[0].id,$scope.exist[0].nombre,$scope.exist[0].apellido,$scope.exist[0].profesor);
                     var alertPopup = $ionicPopup.alert({
                         title: 'Saludos '+$scope.exist[0].nombre
                     });
@@ -72,6 +57,7 @@ angular.module('starter.controllers', [])
                     });
                   }
                   $scope.closeLogin();
+                  $state.go($state.current, {}, {reload: true});
                 },
                 function (){
                   $scope.hide($ionicLoading);  
@@ -81,9 +67,6 @@ angular.module('starter.controllers', [])
                   $scope.closeLogin();
                 }
     );
-    /*$timeout(function() {
-      $scope.closeLogin();
-    }, 1000);*/
   };
 })
 
@@ -584,9 +567,32 @@ angular.module('starter.controllers', [])
   //$rootScope.reload;
   
 })
-.controller('challengeCtrl', function($scope, $sce, $rootScope, $http, $timeout, $state, serveData, productService) {
+.controller('challengeCtrl', function($scope, $sce, $rootScope, $http, $timeout, $state, $ionicLoading, serveData, productService, serveLogin) {
+  $scope.user = serveLogin.getUser();
+  console.log($scope.user[3]);
+  if(serveLogin.isLogin()){
+    $scope.pageAccount = false;
+    $scope.pageContent = true;
+    if($scope.user[3]==1){
+      console.log("if");
+      $scope.pageStudent = false;
+      $scope.pageTeacher = true;
+    }else{
+      console.log("else");
+      $scope.pageStudent = true;
+      $scope.pageTeacher = false;
+    }
+  }else{
+    $scope.pageAccount = true;
+    $scope.pageContent = false;
+  }
+  console.log("account "+$scope.pageAccount);
+  console.log("content "+$scope.pageContent);
+  console.log("student "+$scope.pageStudent);
+  console.log("teacher "+$scope.pageTeacher);
   document.getElementById('spinCourse').style.visibility="hidden";
   document.getElementById('lblCourse').className= "item item-input item-select labelDisabled";
+  document.getElementById('comboCourse').disabled=true;
   $scope.selectOptions =[
     { title: 'Nivel 1', id: 1 , name: 'title1', img: 'crayons.jpg', link: 'synonymous'},
     { title: 'Nivel 2', id: 2 , name: 'title2', img: 'libros.jpg', link: 'synonymous'},
@@ -594,97 +600,130 @@ angular.module('starter.controllers', [])
     { title: 'Nivel 4', id: 4 , name: 'title4', img: 'lenguas.png', link: 'synonymous.html'},
     { title: 'Nivel 5', id: 5 , name: 'title5', img: 'idiomas.png', link: 'synonymous.html'},
     { title: 'Nivel 6', id: 6 , name: 'title6', img: 'crucigramas.jpg', link: 'synonymous.html'}];
-    $scope.selectedselectedLvl;
-    $scope.selectedOrg;
-    $scope.selectedCourse;
+  $scope.selectedselectedLvl;
+  $scope.selectedOrg;
+  $scope.selectedCourse;
+  $scope.dataForm = { time : '20', start_date: new Date() };
 
-    $scope.dataForm = { 'time' : '20' };
-
-     var timeoutId = null;
+  var timeoutId = null;
+  $scope.$watch('dataForm.time', function() {
+    console.log('Has changed');
+    if(timeoutId !== null) {
+      console.log('Ignoring this movement');
+      return;
+    }
+    console.log('Not going to ignore this one');
+    timeoutId = $timeout( function() {
+      console.log('It changed recently!');
+      $timeout.cancel(timeoutId);
+      timeoutId = null;
+      if($scope.dataForm.time < 10){
+        document.getElementById('timeRange').className = 'item range range-assertive';
+      }else if($scope.dataForm.time < 25){
+        document.getElementById('timeRange').className = 'item range range-energized';
+      }else{
+        document.getElementById('timeRange').className = 'item range range-balanced';
+      }
+    }, 100); 
+  });
+  $scope.callClases = function(Obj){
     
-    $scope.$watch('data.time', function() {
-        
-        
-        console.log('Has changed');
-        
-        if(timeoutId !== null) {
-            console.log('Ignoring this movement');
-            return;
-        }
-        
-        console.log('Not going to ignore this one');
-        timeoutId = $timeout( function() {
-            
-            console.log('It changed recently!');
-            
-            $timeout.cancel(timeoutId);
-            timeoutId = null;
-            if($scope.data.time < 10){
-              document.getElementById('time').className = 'item range range-assertive';
-            }else if($scope.data.time < 25){
-              document.getElementById('time').className = 'item range range-energized';
-            }else{
-              document.getElementById('time').className = 'item range range-balanced';
-            }
-            
-            // Now load data from server 
-        }, 100); 
-   });
-    $scope.callToAddToOrganizationList = function(Obj){
-        document.getElementById('spinCourse').style.visibility="visible";
-        document.getElementById('lblCourse').className= "item item-input item-select labelEnabled";
-        console.log(Obj);
-        productService.addOrganization(Obj.id, Obj.nombre);
-        console.log(Obj);
-        $scope.Organization = productService.getOrganization();
-          console.log($scope.Organization[0]);
-          $scope.curso = {
-            nombre : '',
-            nivel: '',
-            id_organizacion : $scope.Organization[0]
-          };
-        var urlCompleta ="http://www.vocabulario.esy.es/persistirClassService.php";
-        var postUrl = $sce.trustAsResourceUrl(urlCompleta);
-        console.log($scope.curso);
-        $http.post(postUrl, $scope.curso)
-        .then(
-        function (response) {
-                      console.log(response.data);
-                      $scope.courses = response.data;
-                      document.getElementById('spinCourse').style.visibility="hidden";
-                      document.getElementById('comboCourse').disabled=false;
-                    },
-                    function (){
-                      console.log('Error al importar los Cursos');
-                      $scope.callToAddToOrganizationList(Obj);
-                    }
-        );
-
-        document.getElementById('comboCourse').disabled = false;
-    };
-    var urlCompleta ="http://www.vocabulario.esy.es/persistirOrganizationsService.php";
+    document.getElementById('lblCourse').className= "item item-input item-select labelEnabled";
+    console.log(Obj);
+    productService.addOrganization(Obj.id, Obj.nombre);
+    console.log(Obj);
+    $scope.Organization = productService.getOrganization();
+      console.log($scope.Organization[0]);
+      $scope.curso = {
+        nombre : '',
+        nivel: '',
+        id_organizacion : $scope.Organization[0]
+      };
+    var urlCompleta ="http://www.vocabulario.esy.es/persistirClassService.php";
     var postUrl = $sce.trustAsResourceUrl(urlCompleta);
-    $http.post(postUrl)
+    console.log($scope.curso);
+    $http.post(postUrl, $scope.curso)
     .then(
     function (response) {
                   console.log(response.data);
-                  $scope.organizations = response.data;
-                  
-                  document.getElementById('spinOrganizations').style.visibility="hidden";
-                  document.getElementById('comboOrganizations').disabled=false;
-
-                  console.log(document.getElementById('comboOrganizations').className);
-                  /*$scope.hide($ionicLoading); */
-
+                  $scope.courses = response.data;
+                  document.getElementById('spinCourse').style.visibility="hidden";
+                  document.getElementById('comboCourse').disabled=false;
                 },
                 function (){
-                  console.log('error al importar los datos');
-        /*$scope.hide($ionicLoading); */
-      }
-                );
-    $scope.createActibity = function(data){
-      console.log(data);
+                  console.log('Error al importar los Cursos');
+                  $scope.callToAddToOrganizationList(Obj);
+                }
+    );
+  };
+  $scope.callOrganizations = function(){
+    if(serveLogin.isLogin()&&$scope.user[3]==1){
+      $scope.organizationSend = {
+          id_persona : $scope.user[0]
+        };
+      document.getElementById('spinCourse').style.visibility="visible";
+      var urlCompleta ="http://www.vocabulario.esy.es/persistirOrganizationsService.php";
+      var postUrl = $sce.trustAsResourceUrl(urlCompleta);
+      $http.post(postUrl,$scope.organizationSend)
+      .then(
+      function (response) {
+                    console.log(response.data);
+                    $scope.organizations = response.data;
+                    
+                    document.getElementById('spinOrganizations').style.visibility="hidden";
+                    document.getElementById('comboOrganizations').disabled=false;
+
+                    console.log(document.getElementById('comboOrganizations').className);
+                    /*$scope.hide($ionicLoading); */
+
+                  },
+                  function (){
+                    console.log('error al importar los datos');
+          /*$scope.hide($ionicLoading); */
+        }
+      );
     }
+  };
+  // Open the login modalLogin
+  $scope.login = function() {
+    $scope.modalLogin.show();
+  };
+  $scope.show = function() {
+    $ionicLoading.show({
+      template: '<p>Loading...</p><ion-spinner></ion-spinner>'
+    });
+  };
+  $scope.createActibity = function(data){
+    console.log("data");
+    if(data.time!=null&&data.selectedCourse!=null&&data.selectedOrg!=null&&data.selectedLvl!=null&&data.end_date!=null){
+      $scope.show($ionicLoading);  
+      
+      var entity = {nombre: data.name, nivel:data.selectedLvl.id, tiempo: data.time, fecha_inicio: data.start_date, fecha_fin: data.end_date, id_curso: data.selectedCourse.id};
+      var objJSON = JSON.stringify(entity);
+      // Do the call to a service using $http or directly do the call here
+
+      var urlCompleta ="http://www.vocabulario.esy.es/InsertNewChallengeService.php";
+      var postUrl = $sce.trustAsResourceUrl(urlCompleta);
+      console.log(objJSON);
+      $http.post(postUrl, objJSON)
+      .then(
+      function (response) {
+                    console.log("entró");
+                    $scope.exist = response.data;
+                    console.log($scope.exist);
+                    $scope.hide($ionicLoading);  
+                    $state.go('app.levels', {}, {reload: true});
+                  },
+                  function (){
+                    $scope.hide($ionicLoading);  
+                    var alertPopup = $ionicPopup.alert({
+                          title: 'error al intentar obtener tus datos'
+                    });
+                    $scope.closeLogin();
+                  }
+      );
+    }
+  }
   $scope.Organization = productService.getOrganization();
   console.log($scope.Organization);
   $scope.curso = {

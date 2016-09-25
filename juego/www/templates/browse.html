@@ -1,42 +1,62 @@
-<ion-view view-title="Browse">
+<ion-view view-title="Crear desafío">
 	<ion-content>
-		<form class="list" name="form" ng-submit="createActibity(dataForm)" novalidate>
-			<label class="item item-input item-select">
-				<div class="input-label">
-					Nivel: 
-				</div>
-				<select id="combo" name="actibityForm" ng-model="dataForm.selectedLvl" ng-options="option.title for option in selectOptions"></select>
-			</label>
-			<div id="time" class="item range range-energized">
-				<i class="icon ion-ios-stopwatch-outline"></i>
-				<input type="range" name="time" ng-model="dataForm.time" min="0" max="60">
-				<i class="icon ion-ios-stopwatch"></i>
+		<div ng-show="pageAccount">
+			<div>
+			    <img class="full-screen" src="/img/default.jpg">
+			    <span>Inicia sesión para acceder a la creación de desafíos</span>
+		    </div>
+		</div> 
+		<div ng-show="pageContent">
+			<div ng-show="pageStudent">
+				<div id="account-img">
+			        <img class="full-screen" src="/img/default.jpg">
+			        <span>Necesitás iniciar sesion con una cuenta de profesor para acceder a la creación de desafíos</span>
+		    	</div>
 			</div>
+			<div ng-show="pageTeacher">
+				<form class="list" name="form" ng-submit="createActibity(dataForm)" ng-init="callOrganizations()" novalidate>
+					<label class="item item-input">
+			          <span class="input-label">Nombre del desafío</span>
+			          <input type="text" ng-model="dataForm.name">
+			        </label>
+					<label class="item item-input item-select">
+						<div class="input-label">
+							Nivel: 
+						</div>
+						<select id="combo" name="actibityForm" ng-model="dataForm.selectedLvl" ng-options="option.title for option in selectOptions"></select>
+					</label>
+					<div id="timeRange" class="item range range-energized">
+						<i class="icon ion-ios-stopwatch-outline"></i>
+						<input type="range" name="time" ng-model="dataForm.time" min="1" max="60">
+						<i class="icon ion-ios-stopwatch"></i>
+					</div>
+					<div id="timeLabel" class="item">
+						<label class="item item-input">
+							Tiempo por pregunta: {{dataForm.time}} seg
+						</label>
+					</div>
+					<label class="item item-input">
+					  <span class="input-label">Fecha de finalización</span>
+					  <input ng-model="dataForm.end_date" type="date">
+					</label>
+					<label class="item item-input item-select">
+						<div class="input-label">
+							Establecimiento:  
+						</div>
+						<select id="comboOrganizations" ng-model="dataForm.selectedOrg"  ng-options="option.nombre for option in organizations" ng-change="callClases(dataForm.selectedOrg)" disabled></select>
+						<ion-spinner id="spinOrganizations" class="ios-small"></ion-spinner>
+					</label>
 
-			<label class="item item-input">
-				Tiempo por pregunta: 
-				<div class="item ">
-					{{dataForm.time}}
-				</div>
-				seg
-			</label>
-
-			<label class="item item-input item-select">
-				<div class="input-label">
-					Establecimiento: 
-				</div>
-				<select id="comboOrganizations" ng-model="dataForm.selectedOrg"  ng-options="option.nombre for option in organizations" ng-change="callToAddToOrganizationList(dataForm.selectedOrg)" disabled></select>
-				<ion-spinner id="spinOrganizations" class="ios-small"></ion-spinner>
-			</label>
-
-			<label id="lblCourse" class="item item-input item-select">
-				<div class="input-label">
-					Curso: 
-				</div>
-				<select id="comboCourse" ng-model="dataForm.selectedCourse" ng-options="option.nombre for option in courses" disabled></select>
-				<ion-spinner id="spinCourse" class="ios-small"></ion-spinner>
-			</label>
-			<button class="button button-full icon-left ion-checkmark-circled button-positive" type="submit">Crear desafio</button>
+					<label id="lblCourse" class="item item-input item-select">
+						<div class="input-label">
+							Curso: 
+						</div>
+						<select id="comboCourse" ng-model="dataForm.selectedCourse" ng-options="option.nombre for option in courses" disabled></select>
+						<ion-spinner id="spinCourse" class="ios-small"></ion-spinner>
+					</label>
+					<button class="button button-full icon-left ion-checkmark-circled button-positive" type="submit">Crear desafio</button>
+				</form>
+			</div>
 		</div>
 	</ion-content>
 </ion-view>

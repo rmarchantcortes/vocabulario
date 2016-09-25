@@ -12,7 +12,7 @@
         <button class="button button-block button-positive" ng-click="login()">Iniciar Sesion</button>
       </div>
     </div>
-    <div id="organizations"  ng-show="pageIsVisible">
+    <div id="organizations" ng-init="callOrganizations()" ng-show="pageIsVisible">
       <ion-list >
         <ion-item class="item-remove-animate item-avatar item-icon-right" ng-model="organization.id" ng-repeat="organization in organizations" ng-click="callToAddToOrganizationList(organization.id, organization.nombre)" href="#/tab/organizations/{{organization.id}}"  >
           <img ng-src="img/organizacion.png">

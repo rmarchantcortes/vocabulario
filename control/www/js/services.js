@@ -86,7 +86,6 @@ angular.module('starter.services', [])
     lastNamePerson=lastName;
   };
   var isLogin = function(){
-    console.log(User);
     if(User == 1){
       return true;
     }else{
@@ -110,6 +109,7 @@ angular.module('starter.services', [])
 .service('productService', function() {
   var productList = [];
   var ClassList = [];
+  var StudentList = [];
   var addOrganization = function(idObj, nameObj) {
       productList = [];
       productList.push(idObj);
@@ -128,11 +128,22 @@ angular.module('starter.services', [])
   var getClass = function(){
       return ClassList;
   };
+  var addStudent = function(idObj, nameObj) {
+      StudentList = [];
+      StudentList.push(idObj);
+      StudentList.push(nameObj);
+  };
+
+  var getStudent = function(){
+      return StudentList;
+  };
   return {
     addOrganization: addOrganization,
     getOrganization: getOrganization,
     addClass: addClass,
-    getClass: getClass
+    getClass: getClass,
+    addStudent: addStudent,
+    getStudent: getStudent
   };
 
 });

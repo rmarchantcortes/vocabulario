@@ -6,12 +6,14 @@ angular.module('starter.services', [])
   var idPerson = -1;
   var namePerson = '';
   var lastNamePerson = '';
+  var isTeacher = 0;
   var array = [];
-  var setUser = function(id, name, lastName) {
+  var setUser = function(id, name, lastName, teacher) {
     User = 1;
     idPerson=id;
     namePerson=name;
     lastNamePerson=lastName;
+    isTeacher = teacher;
   };
   var isLogin = function(){
     if(User == 1){
@@ -25,6 +27,7 @@ angular.module('starter.services', [])
     array.push(idPerson);
     array.push(namePerson);
     array.push(lastNamePerson);
+    array.push(isTeacher);
     return array;
   };
   return {

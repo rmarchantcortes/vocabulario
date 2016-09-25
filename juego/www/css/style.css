@@ -230,4 +230,10 @@ label.labelDisabled, label.labelDisabled select{
 label.labelEnabled, label.labelEnabled select{
 	background: #fff;
 }
+.full-screen{
+	width: 100%;
+	height: auto;
+	vertical-align:middle;
+
+}
 html { overflow:hidden; }

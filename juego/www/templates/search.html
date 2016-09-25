@@ -1,5 +1,11 @@
 <ion-view view-title="Search">
   <ion-content>
-    <h1>Search</h1>
+    <div class="list" ng-init="callChallenges()">
+	    <a class="item item-avatar" href="#">
+	      <img src="img/sword.jpg">
+	      <h2>{{challenge.level}}</h2>
+	      <p>{{challenge.name}}</p>
+	    </a>
+	</div>
   </ion-content>
 </ion-view>

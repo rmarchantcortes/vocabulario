@@ -1,0 +1,15 @@
+<ion-view view-title="{{Student[1]}}">
+  <ion-content>
+    <div class="card">
+        <div class="item item-divider">
+            Avances de Establecimientos:
+            <button>
+              <i class="icon icon-left ion-plus-round"></i>
+            </button ng-click="openChart()">
+        </div>
+        <div id="graph" class="item item-text-wrap" ng-init="callScorePerson()" ng-show="chartIsVisible">
+            <canvas id="updatingChart" class="chart chart-line" chart-data="data" chart-labels="labels" chart-legend="true" chart-series="series" chart-options="options"></canvas>
+        </div>
+      </div>
+  </ion-content>
+</ion-view>
