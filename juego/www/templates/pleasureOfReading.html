@@ -1,0 +1,18 @@
+<ion-view  view-title="Por el placer de leer" >
+	<ion-content ng-init="loadBefore()">
+		<div class="list card" ng-repeat="text in texts">
+			<div class="item item-avatar">
+				<img src="mcfly.jpg">
+				<h2>{{text.titulo}}</h2>
+				<p>{{text.fecha}}</p>
+			</div>
+			<div class="item item-body">
+				<img class="full-image" src="delorean.jpg">
+				<p>
+					{{text.texto}}
+				</p>
+			</div>
+		</div>
+	</ion-content>
+</ion-view>
+

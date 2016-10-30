@@ -1,24 +1,28 @@
-<ion-view view-title="Crear desafío">
+<ion-view view-title="Crear Desafío">
 	<ion-content>
-		<div ng-show="pageAccount">
-			<div>
-			    <img class="full-screen" src="/img/default.jpg">
-			    <span>Inicia sesión para acceder a la creación de desafíos</span>
-		    </div>
+		<div ng-show="pageAccount" class="middle">
+			<div class="list card">
+				<div class="item item-body">
+					<img class="full-screen" src="/img/default.jpg">
+					<p>Inicia sesión para acceder a la creación de desafíos</p>
+				</div>
+			</div>
 		</div> 
-		<div ng-show="pageContent">
-			<div ng-show="pageStudent">
-				<div id="account-img">
-			        <img class="full-screen" src="/img/default.jpg">
-			        <span>Necesitás iniciar sesion con una cuenta de profesor para acceder a la creación de desafíos</span>
-		    	</div>
+		<div ng-show="pageContent" class="full">
+			<div ng-show="pageStudent" class="middle">
+				<div class="list card">
+					<div class="item item-body">
+						<img class="full-screen" src="/img/default.jpg">
+						<p>Necesitás iniciar sesion con una cuenta de profesor para acceder a la creación de desafíos</p>
+					</div>
+				</div>
 			</div>
 			<div ng-show="pageTeacher">
 				<form class="list" name="form" ng-submit="createActibity(dataForm)" ng-init="callOrganizations()" novalidate>
 					<label class="item item-input">
-			          <span class="input-label">Nombre del desafío</span>
-			          <input type="text" ng-model="dataForm.name">
-			        </label>
+						<span class="input-label">Nombre del desafío</span>
+						<input type="text" ng-model="dataForm.name">
+					</label>
 					<label class="item item-input item-select">
 						<div class="input-label">
 							Nivel: 
@@ -36,8 +40,8 @@
 						</label>
 					</div>
 					<label class="item item-input">
-					  <span class="input-label">Fecha de finalización</span>
-					  <input ng-model="dataForm.end_date" type="date">
+						<span class="input-label">Fecha de finalización</span>
+						<input ng-model="dataForm.end_date" type="date">
 					</label>
 					<label class="item item-input item-select">
 						<div class="input-label">

@@ -5,3 +5,64 @@
 	vertical-align:middle;
 
 }
+
+.header .col {
+    background-color:lightgrey;
+}
+
+.col {
+    border: solid 1px grey;
+    border-bottom-style: none;
+    border-right-style: none;
+}
+
+.col:last-child {
+    border-right: solid 1px grey;
+}
+
+.row:last-child .col {
+    border-bottom: solid 1px grey;
+}
+.home_background{
+	background-image: url('/img/class_room.png');
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center; 
+	width: 100%;
+	height: 100%;
+}
+.full, .scroll{
+	width: 100%;
+	height: 100%;
+}
+.teacher_background{
+	background-image: url('/img/teacher.png');
+	position: absolute;
+	background-repeat: no-repeat;
+	background-size: 250px 300px;
+    left: -30px;
+	background-position: center; 
+	width: 100%;
+	height: 100%;
+}
+.bubble_background{
+	background-image: url('/img/bubble.png');
+	background-repeat: no-repeat;
+	position: relative;
+	right: -110px;
+    top: -90px;
+    background-size: 180px 120px;
+	background-position: center; 
+	width: 100%;
+	height: 100%;
+}
+.welcome_background{
+	background-image: url('/img/welcome.png');
+	background-repeat: no-repeat;
+	position: relative;
+	top: -10px;
+    background-size: 110px 35px;
+	background-position: center; 
+	width: 100%;
+	height: 100%;
+}

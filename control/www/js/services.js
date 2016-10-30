@@ -110,6 +110,7 @@ angular.module('starter.services', [])
   var productList = [];
   var ClassList = [];
   var StudentList = [];
+  var ChallengeList = [];
   var addOrganization = function(idObj, nameObj) {
       productList = [];
       productList.push(idObj);
@@ -137,13 +138,24 @@ angular.module('starter.services', [])
   var getStudent = function(){
       return StudentList;
   };
+  var addChallenge = function(idObj, nameObj) {
+      ChallengeList = [];
+      ChallengeList.push(idObj);
+      ChallengeList.push(nameObj);
+  };
+
+  var getChallenge = function(){
+      return ChallengeList;
+  };
   return {
     addOrganization: addOrganization,
     getOrganization: getOrganization,
     addClass: addClass,
     getClass: getClass,
     addStudent: addStudent,
-    getStudent: getStudent
+    getStudent: getStudent,
+    addChallenge: addChallenge,
+    getChallenge: getChallenge
   };
 
 });

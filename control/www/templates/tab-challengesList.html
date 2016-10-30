@@ -1,0 +1,15 @@
+<ion-view view-title="{{ChallengeName}}">
+	<ion-nav-buttons side="right"  >
+	</ion-nav-buttons>
+	<ion-content>
+		<div ng-init="callChallenges()">
+			<div class="list list-inset"   ng-repeat="challenge in challenges">
+				<!-- ui-sref="app.{{level.link}}" ng-click="startLevels(level.id)" -->
+				<a class="item item-avatar" href="#/tab/organizations/{{organization.id}}/{{curso.id}}/challengesList/challenge" ng-click="setChallenge({{challenge.id}}, '{{challenge.nombre}}')">
+				  <img src="img/sword.jpg">
+				  <p>{{challenge.nombre}}</p>
+				</a>
+			</div>
+		</div>
+	</ion-content>
+</ion-view>

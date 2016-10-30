@@ -34,13 +34,55 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
   .state('app.search', {
     url: '/search',
+    cache: false,
     views: {
       'menuContent': {
-        templateUrl: 'templates/search.html'
+        templateUrl: 'templates/search.html',
+        controller: 'challengeDetailCtrl'
       }
     }
   })
-
+  
+  .state('app.termsCouplets', {
+      url: '/termsCouplets',
+      cache: false,
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/termsCouplets.html',
+          controller: 'TermsCoupletsCtrl'
+        }
+      }
+    })
+  .state('app.replaceWord', {
+      url: '/replaceWord',
+      cache: false,
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/replaceWord.html',
+          controller: 'ReplaceWordCtrl'
+        }
+      }
+    })
+  .state('app.doubleReplaceWord', {
+      url: '/doubleReplaceWord',
+      cache: false,
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/doubleReplaceWord.html',
+          controller: 'DoubleReplaceWordCtrl'
+        }
+      }
+    })
+  .state('app.missingWord', {
+      url: '/missingWord',
+      cache: false,
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/missingWord.html',
+          controller: 'MissingWordCtrl'
+        }
+      }
+    })
   .state('app.browse', {
       url: '/browse',
       cache: false,
@@ -81,6 +123,36 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       }
     }
   })
+    .state('app.wordIdentifier', {
+    url: '/wordIdentifier',
+    cache: false,
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/wordIdentifier.html',
+        controller: 'WordIdentifierCtrl'
+      }
+    }
+  })
+    .state('app.comments', {
+    url: '/comments',
+    cache: false,
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/comments.html',
+        controller: 'commentsCtrl'
+      }
+    }
+  })
+    .state('app.pleasureOfReading', {
+      url: '/pleasureOfReading',
+      cache: false,
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/pleasureOfReading.html',
+          controller: 'PleasureOfReadingCtrl'
+        }
+      }
+    })
   .state('app.single', {
     url: '/playlist',
     views: {

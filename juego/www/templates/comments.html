@@ -1,0 +1,24 @@
+<ion-view view-title="Comentarios">
+	<ion-content>
+		<div ng-view class="list list-inset" ng-init="callComments()">
+			<form name="exampleForm">
+				<label class="item item-input">
+					<textarea placeholder="Comentario" style="height:120px;" ng-model="sendComment.comentario"></textarea>
+				</label>
+				<button class="button button-block button-positive" ng-click="insertComment(sendComment)"  required>Comentar</button>
+			</form>
+			<div class="list card"  ng-repeat="comment in comments">
+				<div class="item item-avatar">
+					<img src="img/default.jpg">
+					<h2>{{comment.nombre}} {{comment.apellido}}</h2>
+				</div>
+				<div class="item item-body">
+					<p>{{comment.comentario}}</p>
+					<p>
+						<a href="#" class="subdued">1 Like</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</ion-content>
+</ion-view>

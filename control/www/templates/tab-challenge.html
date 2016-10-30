@@ -1,0 +1,18 @@
+<ion-view view-title="{{ChallengeName}}">
+	<ion-nav-buttons side="right"  >
+	</ion-nav-buttons>
+	<ion-content>
+		<div ng-init="getChallenges()">
+			<ion-list >
+				<div class="row header">
+					<div class="col">Nombre</div>
+					<div class="col">Puntaje</div>
+				</div>
+				<div class="row" ng-repeat="challenge in challenges">
+					<div class="col">{{challenge.nombre}}</div>
+					<div class="col">{{challenge.puntaje}}</div>
+				</div>
+			</ion-list>
+		</div>
+	</ion-content>
+</ion-view>

@@ -128,15 +128,23 @@ box-shadow: inset -10px 11px 13px 2px rgba(219,216,219,1);*/
 }
 /*.scroll para centrar verticalmente*/
 .scroll-content {
-  display: table !important;
-  width: 100% !important;
-  /*altura del centrado vertical*/
-  height: 100% !important;
+ 
 }
-.scroll {
-  display: table-cell;
-  vertical-align: middle;
-  text-align: center;
+.scroll{
+	display: table !important;
+	width: 100% !important;
+	height: 100% !important;
+  
+}
+.middle{
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+}
+.full{
+	display: table !important;
+	width: 100% !important;
+	height: 100% !important;
 }
 .button-fix{
 	margin-left: 15px;
@@ -230,10 +238,38 @@ label.labelDisabled, label.labelDisabled select{
 label.labelEnabled, label.labelEnabled select{
 	background: #fff;
 }
-.full-screen{
+.terms-div{
+	border: 1px solid black;
+	border-radius: 5%;
+	overflow: hidden;
+	background-color: white;
+}
+.terms-left{
+	border-right: 1px solid black;
+}
+.terms-light{
+	margin: 0px;
+	padding-top: 5%;
+	padding-bottom: 5%;
+	border-bottom: 1px solid black;
+	cursor: pointer;
+	
+}
+.terms-light-bottom{
+	margin: 0px;
+	padding-top: 5%;
+	padding-bottom: 5%;
+	cursor: pointer;
+}
+.terms-row{
+	margin: 0px;
+	padding: 0px;
+	overflow: hidden;
+}
+/*.full-screen{
 	width: 100%;
 	height: auto;
 	vertical-align:middle;
 
-}
+}*/
 html { overflow:hidden; }
