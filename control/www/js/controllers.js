@@ -205,7 +205,7 @@ angular.module('starter.controllers', [])
 		};
 		var entity = $scope.user;
 		var objJSON = JSON.stringify($scope.loginData);
-
+		$scope.show($ionicLoading);  
 		
 		// Do the call to a service using $http or directly do the call here
 		var urlCompleta ="http://www.vocabulario.esy.es/persistirLoginService.php";

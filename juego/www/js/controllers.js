@@ -3,6 +3,7 @@ angular.module('starter.controllers', [])
 .controller('AppCtrl', function($scope, $sce, $http, $state, $ionicPopup, $ionicLoading, $ionicModal, $timeout, serveLogin) {
 	$scope.user = serveLogin.getUser();
 	$scope.loginData = {};
+	$scope.trying = 0;
 	// Create the login modalLogin that we will use later
 	$ionicModal.fromTemplateUrl('templates/login.html', {
 		scope: $scope
@@ -62,30 +63,22 @@ angular.module('starter.controllers', [])
 				$state.go('app.levels', {}, {reload: true});
 			},
 			function (){
-				$scope.hide($ionicLoading);  
-				var alertPopup = $ionicPopup.alert({
-					title: 'error al intentar obtener tus datos'
-				});
-				$scope.closeLogin();
+				if($scope.trying==0){
+					$scope.doLogin();
+					$scope.trying +=1;
+				}else{
+					$scope.trying=0;
+					$scope.hide($ionicLoading);  
+					var alertPopup = $ionicPopup.alert({
+						title: 'error al intentar obtener tus datos'
+					});
+					$scope.closeLogin();
+				}
+				
 			}
 		);
 	};
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -126,20 +119,6 @@ angular.module('starter.controllers', [])
 		}
 	});
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -225,19 +204,6 @@ angular.module('starter.controllers', [])
 		}
 	};
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -716,20 +682,6 @@ angular.module('starter.controllers', [])
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .controller('WordIdentifierCtrl', function($scope, $http, $sce, $ionicLoading, $compile, $ionicPopup, $state, $timeout, serveInclude, serveData, serveLogin, viewService) {
 	viewService.setView('WordIdentifierCtrl');
 	var page = angular.element(document.getElementById('contenedor'));
@@ -1020,19 +972,6 @@ angular.module('starter.controllers', [])
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 .controller('synonymousAntonymCtrl', function($scope, $http, $sce, $ionicLoading, $compile, $ionicPopup, $timeout, serveInclude, serveData, serveLogin, viewService) {
 	viewService.setView('synonymousAntonymCtrl');
 	var page = angular.element(document.getElementById('contenedor'));
@@ -1304,19 +1243,6 @@ angular.module('starter.controllers', [])
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 .controller('MissingWordCtrl', function($scope, $http, $sce, $ionicLoading, $state, $compile, $ionicPopup, $timeout, serveInclude, serveData, serveLogin, viewService, serveLevel) {
 	viewService.setView('MissingWordCtrl');
 	var page = angular.element(document.getElementById('contenedor'));
@@ -1391,22 +1317,19 @@ angular.module('starter.controllers', [])
 		if(successfulGame){
 			serveData.setLastLevel(id);
 			if(serveLogin.isLogin()){
-				console.log("pN");
 				$scope.show($ionicLoading);
-				$scope.scoreSend = {puntaje:$scope.score, fecha: new Date(), id_persona: serveLogin.getUser()[0],id_challenge: serveLevel.idChallenge(),id_juego:1};
+				$scope.scoreSend = {puntaje:$scope.score, fecha: new Date(), id_persona: parseInt(serveLogin.getUser()[0]),id_desafio: serveLevel.idChallenge(),id_juego:1};
 				console.log($scope.scoreSend);
 				var objJSON = JSON.stringify($scope.scoreSend);
 				var urlCompleta ="http://www.vocabulario.esy.es/InsertScoreService.php";
 				var postUrl = $sce.trustAsResourceUrl(urlCompleta);
-				$http.post(postUrl)
+				$http.post(postUrl, objJSON)
 				.then(
 					function (response) {
-						console.log("Y");
 						$scope.vocabulary = response.data;
 						$scope.hide($ionicLoading);  
 					},
 					function (){
-						console.log("N");
 						if($scope.trying==0){
 							$scope.loadBefore();
 							$scope.trying = $scope.trying+1;
@@ -1631,21 +1554,7 @@ angular.module('starter.controllers', [])
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-.controller('DoubleReplaceWordCtrl', function($scope, $http, $sce, $ionicLoading, $state, $compile, $ionicPopup, $timeout, serveInclude, serveData, serveLogin, viewService) {
+.controller('DoubleReplaceWordCtrl', function($scope, $http, $sce, $ionicLoading, $state, $compile, $ionicPopup, $timeout, serveInclude, serveData, serveLogin, viewService, serveLevel) {
 	viewService.setView('DoubleReplaceWordCtrl');
 	var page = angular.element(document.getElementById('contenedor'));
 	var card = document.createElement('div');
@@ -1808,15 +1717,15 @@ angular.module('starter.controllers', [])
 				console.log(vals);
 				vocabularyLength = $scope.vocabulary.length;
 				console.log(vocabularyLength);
-				if(serveLevel.isLevel('MissingWordCtrl')){
+				if(serveLevel.isLevel('DoubleReplaceWordCtrl')){
 					$scope.numdata = serveLevel.getLevelParam();
-					if($scope.showGame()==true){
+					if($scope.showGame()){
 						$scope.hide($ionicLoading);  
 						$scope.showAlertPopUp('Reemplaza la palabra x2', 'Intrucciones: Selecciona los sinónimos que encajen en los espacios del texto', true);
 						$scope.timer=20;
 					}else{
 						$scope.hide($ionicLoading); 
-						$scope.showAlertPopUp('Ha ocurrido un error', 'porfavor, vuelve a cargar el minijuego');
+						$scope.showAlertPopUp('Ha ocurrido un error', 'porfavor, vuelve a cargar el minijuego show');
 						$state.go('app.levels', {}, {reload: true});
 					}
 				}else{
@@ -1879,7 +1788,7 @@ angular.module('starter.controllers', [])
 	};
 	$scope.showGame = function(){
 		console.log(vals);
-		try{
+		/*try{*/
 			var alternative = '';
 			$scope.name = '';
 			$scope.id = '';
@@ -1898,7 +1807,7 @@ angular.module('starter.controllers', [])
 							break;
 						}
 					}else{
-						console.log("1");
+						console.log("random: "+random);
 						vals.length--;
 						words.push(vals[random][0]);
 						console.log("2");
@@ -1907,6 +1816,8 @@ angular.module('starter.controllers', [])
 						var name =(vals[random][1].texto);
 						name = name.replace(vals[random][1].nombre, vals[random][1].nombre.toLowerCase());
 						name = name.replace(vals[random][1].nombre.toLowerCase(), function myFunction(x){return x.toUpperCase().bold();});
+						name = name.replace(vals[random][2].nombre, vals[random][2].nombre.toLowerCase());
+						name = name.replace(vals[random][2].nombre.toLowerCase(), function myFunction(x){return x.toUpperCase().bold();});
 						/*var start = name.toLowerCase().indexOf(vals[random].nombre.toLowerCase());
 						var end = name.toLowerCase().indexOf(" ", start);*/
 						console.log("3");
@@ -1918,7 +1829,7 @@ angular.module('starter.controllers', [])
 							array.push(vals[random][2].id);
 							alternatives.push(array);
 							console.log(alternatives);
-							$scope.setMatrix(vals[random][0], vals[random][1].nombre+", "+vals[random][2].nombre);
+							$scope.setMatrix(vals[random][0], vals[random][1].sinonimo+", "+vals[random][2].sinonimo);
 						}
 						console.log("4");
 					}
@@ -1927,7 +1838,7 @@ angular.module('starter.controllers', [])
 					console.log(vals[random][1].id);
 					if(!$scope.doubleContains(alternatives, vals[random][1].id, vals[random][2].id)){
 						alternatives.push(vals[random][1].id);
-						$scope.setMatrix(vals[random][0], vals[random][1].nombre+", "+vals[random][2].nombre);
+						$scope.setMatrix(vals[random][0], vals[random][1].sinonimo+", "+vals[random][2].sinonimo);
 					}else{
 						i--;
 						console.log("/");
@@ -1953,10 +1864,10 @@ angular.module('starter.controllers', [])
 				page.append(html);
 				return true;
 			}
-		}catch(e){
+		/*}catch(e){
 			console.log(e);
 			return false;
-		}
+		}*/
 	};
 	$scope.emparejar = function(){
 		console.log($scope.vocabulary);
@@ -1973,17 +1884,6 @@ angular.module('starter.controllers', [])
 		});
 	};
 })
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -2271,20 +2171,6 @@ angular.module('starter.controllers', [])
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .controller('SynonymousCtrl', function($scope, $http, $sce, $ionicLoading, $state, $compile, $ionicPopup, $timeout, serveInclude, serveData, serveLogin, viewService, serveLevel) {
 	viewService.setView('SynonymousCtrl');
 	var page = angular.element(document.getElementById('contenedor'));
@@ -2558,22 +2444,6 @@ angular.module('starter.controllers', [])
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .controller('PlaylistCtrl', function($scope, $rootScope, $state, serveData) {
 	//$state.go('app.levels', {cache: false});
 	//$rootScope.reload;
@@ -2585,23 +2455,8 @@ angular.module('starter.controllers', [])
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .controller('challengeDetailCtrl', function($scope, $sce, $rootScope, $ionicPopup, $http, $timeout, $state, $ionicLoading, serveData, productService, serveLogin, serveLevel) {
+	$scope.default = {image : 'default.png'};
 	$scope.user = serveLogin.getUser();
 	console.log("challengeDetail");
 	$scope.levels = [
@@ -2626,7 +2481,7 @@ angular.module('starter.controllers', [])
 		console.log(id);
 		angular.forEach($scope.levels, function(value, key) {
 			if(id == value.id){
-				serveLevel.setLevelParam(value.ctl, value.alt, true);
+				serveLevel.setLevelParam(value.ctl, value.alt, value.id);
 			}
 		});
 	};
@@ -2681,24 +2536,8 @@ angular.module('starter.controllers', [])
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .controller('challengeCtrl', function($scope, $sce, $rootScope, $http, $timeout, $state, $ionicLoading, serveData, productService, serveLogin) {
+	$scope.default = {image : 'default.png'};
 	$scope.user = serveLogin.getUser();
 	console.log($scope.user[3]);
 	if(serveLogin.isLogin()){
@@ -2864,21 +2703,6 @@ angular.module('starter.controllers', [])
 		id_organizacion : $scope.Organization[0]
 	};
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

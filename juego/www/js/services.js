@@ -107,7 +107,7 @@ angular.module('starter.services', [])
 .service('serveLevel', function() {
 	var level='';
 	var parameter = 0;
-	var isChallenge = false;
+	var idChallenge = 0;
 	var isLevel = function(lvl) {
 		console.log(level);
 		console.log(lvl);
