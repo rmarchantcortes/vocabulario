@@ -6,12 +6,12 @@
 			<!-- style="display:none;" -->
 			<div class="list"  ng-repeat="level in levels"  id="{{level.name}}" >
 				<div class="button-bar">
-					<a class="item item-avatar" ui-sref="app.{{level.link}}" style="background-color: #33cd5f; width: 73%;" ng-click="startLevels(level.id)" >
+					<a class="item item-avatar button button-balanced" ui-sref="app.{{level.link}}" style="width:73%;" ng-click="startLevels(level.id)" >
 						<img src="img/{{level.img}}" style="border-radius:0%;">
 						<h2>{{level.title}}</h2>
-						<p>{{level.description}}</p>
+						<p style="text-overflow: ellipsis;    overflow: hidden;">{{level.description}}</p>
 					</a>
-					<button id="comment{{level.id}}" class="button button-balanced" ui-sref="app.comments"  style="background-color: #33cd5f; width:20%;" ng-click="startLevels(level.id)">Comentarios</button>
+					<button id="comment{{level.id}}" class="button button-balanced" ui-sref="app.comments"   ng-click="startLevels(level.id)">Comentarios</button>
 				</div>
 			</div>
 		<!-- <div class="gris" style="background-color: #ccc;" id="{{level.name}}" ng-repeat="level in levels">

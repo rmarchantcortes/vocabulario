@@ -18,6 +18,58 @@ angular.module('starter.controllers', [])
 		$scope.modalLogin = modalLogin;
 	});
 
+	$scope.newAccount = {};
+
+	// Create the login modalLogin that we will use later
+	$ionicModal.fromTemplateUrl('templates/newUser.html', {
+		scope: $scope
+	}).then(function(modalAccount) {
+		$scope.modalAccount = modalAccount;
+	});
+	$scope.closeAccount = function() {
+		$scope.modalAccount.hide();
+	};
+	$scope.account = function() {
+		$scope.modalAccount.show();
+	};
+	$scope.doNewAccount = function() {
+		console.log('Doing account', $scope.newAccount);
+		var objJSON = JSON.stringify($scope.newAccount);
+		if($scope.newAccount.password == $scope.newAccount.repassword){
+			console.log("equal");
+			$scope.show($ionicLoading);
+			// Do the call to a service using $http or directly do the call here
+			var urlCompleta ="http://www.vocabulario.esy.es/InsertNewUserService.php";
+			var postUrl = $sce.trustAsResourceUrl(urlCompleta);
+			console.log(objJSON);
+			$http.post(postUrl, objJSON)
+			.then(
+			function (response) {
+					console.log("create");
+					$scope.exist = response.data;
+					console.log($scope.exist);
+					$scope.hide($ionicLoading);
+					$scope.closeAccount();
+					$state.go($state.current, {}, {reload: true});
+				},
+				function (){
+					console.log("fail");
+					$scope.hide($ionicLoading);  
+					var alertPopup = $ionicPopup.alert({
+						title: 'error al intentar crear el nuevo usuario'
+					});
+					$scope.closeAccount();
+
+				}
+			);
+		}else{
+			console.log("distinc");
+			var alertPopup = $ionicPopup.alert({
+				title: 'Las claves ingresadas no coinciden'
+			});
+		}
+		
+	};
 	// Triggered in the login modalLogin to close it
 	$scope.closeLogin = function() {
 		$scope.modalLogin.hide();
@@ -166,6 +218,58 @@ angular.module('starter.controllers', [])
 		$scope.accountIsVisible = true;
 		$scope.pageIsVisible = false;
 	}
+	$scope.newAccount = {};
+
+	// Create the login modalLogin that we will use later
+	$ionicModal.fromTemplateUrl('templates/newUser.html', {
+		scope: $scope
+	}).then(function(modalAccount) {
+		$scope.modalAccount = modalAccount;
+	});
+	$scope.closeAccount = function() {
+		$scope.modalAccount.hide();
+	};
+	$scope.account = function() {
+		$scope.modalAccount.show();
+	};
+	$scope.doNewAccount = function() {
+		console.log('Doing account', $scope.newAccount);
+		var objJSON = JSON.stringify($scope.newAccount);
+		if($scope.newAccount.password == $scope.newAccount.repassword){
+			console.log("equal");
+			$scope.show($ionicLoading);
+			// Do the call to a service using $http or directly do the call here
+			var urlCompleta ="http://www.vocabulario.esy.es/InsertNewUserService.php";
+			var postUrl = $sce.trustAsResourceUrl(urlCompleta);
+			console.log(objJSON);
+			$http.post(postUrl, objJSON)
+			.then(
+			function (response) {
+					console.log("create");
+					$scope.exist = response.data;
+					console.log($scope.exist);
+					$scope.hide($ionicLoading);
+					$scope.closeAccount();
+					$state.go($state.current, {}, {reload: true});
+				},
+				function (){
+					console.log("fail");
+					$scope.hide($ionicLoading);  
+					var alertPopup = $ionicPopup.alert({
+						title: 'error al intentar crear el nuevo usuario'
+					});
+					$scope.closeAccount();
+
+				}
+			);
+		}else{
+			console.log("distinc");
+			var alertPopup = $ionicPopup.alert({
+				title: 'Las claves ingresadas no coinciden'
+			});
+		}
+		
+	};
 	$ionicModal.fromTemplateUrl('templates/login.html', {
 		scope: $scope
 	}).then(function(modalLogin) {
@@ -362,6 +466,58 @@ angular.module('starter.controllers', [])
 								}
 		);
 	}
+	$scope.newAccount = {};
+
+	// Create the login modalLogin that we will use later
+	$ionicModal.fromTemplateUrl('templates/newUser.html', {
+		scope: $scope
+	}).then(function(modalAccount) {
+		$scope.modalAccount = modalAccount;
+	});
+	$scope.closeAccount = function() {
+		$scope.modalAccount.hide();
+	};
+	$scope.account = function() {
+		$scope.modalAccount.show();
+	};
+	$scope.doNewAccount = function() {
+		console.log('Doing account', $scope.newAccount);
+		var objJSON = JSON.stringify($scope.newAccount);
+		if($scope.newAccount.password == $scope.newAccount.repassword){
+			console.log("equal");
+			$scope.show($ionicLoading);
+			// Do the call to a service using $http or directly do the call here
+			var urlCompleta ="http://www.vocabulario.esy.es/InsertNewUserService.php";
+			var postUrl = $sce.trustAsResourceUrl(urlCompleta);
+			console.log(objJSON);
+			$http.post(postUrl, objJSON)
+			.then(
+			function (response) {
+					console.log("create");
+					$scope.exist = response.data;
+					console.log($scope.exist);
+					$scope.hide($ionicLoading);
+					$scope.closeAccount();
+					$state.go($state.current, {}, {reload: true});
+				},
+				function (){
+					console.log("fail");
+					$scope.hide($ionicLoading);  
+					var alertPopup = $ionicPopup.alert({
+						title: 'error al intentar crear el nuevo usuario'
+					});
+					$scope.closeAccount();
+
+				}
+			);
+		}else{
+			console.log("distinc");
+			var alertPopup = $ionicPopup.alert({
+				title: 'Las claves ingresadas no coinciden'
+			});
+		}
+		
+	};
 	// Triggered in the login modalLogin to close it
 	$scope.closeLogin = function() {
 		$scope.modalLogin.hide();
@@ -909,6 +1065,58 @@ angular.module('starter.controllers', [])
 								}
 		);
 	}
+	$scope.newAccount = {};
+
+	// Create the login modalLogin that we will use later
+	$ionicModal.fromTemplateUrl('templates/newUser.html', {
+		scope: $scope
+	}).then(function(modalAccount) {
+		$scope.modalAccount = modalAccount;
+	});
+	$scope.closeAccount = function() {
+		$scope.modalAccount.hide();
+	};
+	$scope.account = function() {
+		$scope.modalAccount.show();
+	};
+	$scope.doNewAccount = function() {
+		console.log('Doing account', $scope.newAccount);
+		var objJSON = JSON.stringify($scope.newAccount);
+		if($scope.newAccount.password == $scope.newAccount.repassword){
+			console.log("equal");
+			$scope.show($ionicLoading);
+			// Do the call to a service using $http or directly do the call here
+			var urlCompleta ="http://www.vocabulario.esy.es/InsertNewUserService.php";
+			var postUrl = $sce.trustAsResourceUrl(urlCompleta);
+			console.log(objJSON);
+			$http.post(postUrl, objJSON)
+			.then(
+			function (response) {
+					console.log("create");
+					$scope.exist = response.data;
+					console.log($scope.exist);
+					$scope.hide($ionicLoading);
+					$scope.closeAccount();
+					$state.go($state.current, {}, {reload: true});
+				},
+				function (){
+					console.log("fail");
+					$scope.hide($ionicLoading);  
+					var alertPopup = $ionicPopup.alert({
+						title: 'error al intentar crear el nuevo usuario'
+					});
+					$scope.closeAccount();
+
+				}
+			);
+		}else{
+			console.log("distinc");
+			var alertPopup = $ionicPopup.alert({
+				title: 'Las claves ingresadas no coinciden'
+			});
+		}
+		
+	};
 	// Create the login modalLogin that we will use later
 	$ionicModal.fromTemplateUrl('templates/login.html', {
 		scope: $scope

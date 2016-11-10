@@ -89,13 +89,14 @@ angular.module('starter.controllers', [])
 .controller('LevelsCtrl', function($scope, $sce, $http, $ionicPopup, serveData, serveInclude, viewService, serveLevel) {
 	viewService.setView('LevelsCtrl');
 	$scope.levels = [
-		{ title: 'Nivel 1', id: 1 , name: 'title1', ctl: 'MissingWordCtrl', alt: 3, img: 'Icon-level-01.png', link: 'missingWord', description: 'Rellena el espacio faltante'},
-		{ title: 'Nivel 2', id: 2 , name: 'title2', ctl: 'MissingWordCtrl', alt: 4, img: 'Icon-level-02.png', link: 'missingWord', description: 'Rellena el espacio faltante'},
-		{ title: 'Nivel 3', id: 3 , name: 'title3', ctl: 'ReplaceWordCtrl', alt: 3, img: 'Icon-level-03.png', link: 'replaceWord', description: 'Busca un sinónimo'},
-		{ title: 'Nivel 4', id: 4 , name: 'title4', ctl: 'WordIdentifierCtrl', alt: 3, img: 'Icon-level-04.png', link: 'wordIdentifier', description: 'Sinonimos o Antonimos en una oración'},
-		{ title: 'Nivel 5', id: 5 , name: 'title5', ctl: 'TermsCoupletsCtrl', alt: 3, img: 'Icon-level-05.png', link: 'termsCouplets', description: 'Sinonimos 3 alternativas'},
-		{ title: 'Nivel 6', id: 6 , name: 'title6', ctl: 'DoubleReplaceWordCtrl', alt: 3, img: 'Icon-level-06.png', link: 'doubleReplaceWord', description: 'Sinonimos 3 alternativas'}
+		{ title: 'Nivel 1', id: 1 , name: 'title1', ctl: 'MissingWordCtrl', alt: 3, img: 'Icon-level-01.png', link: 'missingWord', description: 'Palabra faltante'},
+		{ title: 'Nivel 2', id: 2 , name: 'title2', ctl: 'MissingWordCtrl', alt: 4, img: 'Icon-level-02.png', link: 'missingWord', description: 'Palabra faltante'},
+		{ title: 'Nivel 3', id: 3 , name: 'title3', ctl: 'ReplaceWordCtrl', alt: 3, img: 'Icon-level-03.png', link: 'replaceWord', description: 'Replazar palabra'},
+		{ title: 'Nivel 4', id: 4 , name: 'title4', ctl: 'WordIdentifierCtrl', alt: 3, img: 'Icon-level-04.png', link: 'wordIdentifier', description: 'Sinonimo o Antonimo'},
+		{ title: 'Nivel 5', id: 5 , name: 'title5', ctl: 'DoubleReplaceWordCtrl', alt: 3, img: 'Icon-level-05.png', link: 'doubleReplaceWord', description: 'Remplazar 2 palabras'},
+		{ title: 'Nivel 6', id: 6 , name: 'title6', ctl: 'TermsCoupletsCtrl', alt: 3, img: 'Icon-level-06.png', link: 'termsCouplets', description: 'terminos pareados'}
 	];
+			/*{ title: 'Nivel 5', id: 5 , name: 'title5', ctl: 'TermsCoupletsCtrl', alt: 3, img: 'Icon-level-05.png', link: 'termsCouplets', description: 'terminos pareados'},*/
 	$scope.startLevels = function(id) {
 		console.log('iniciar: '+id);
 		serveInclude.setPage(id);
@@ -1627,7 +1628,7 @@ angular.module('starter.controllers', [])
 	};
 	$scope.pasarNivel= function(id){
 		if(successfulGame){
-			serveData.setLastLevel(id);
+			//serveData.setLastLevel(id);
 		}
 	};
 	$scope.gameOverForTime = function(){
@@ -1797,7 +1798,7 @@ angular.module('starter.controllers', [])
 			//ingresa el la palabra a evaluar y las alternativas
 			for (var i = 0; i < $scope.numdata; i++) {
 				var random = Math.floor((Math.random()*vals.length)+1)-1;
-				console.log(vals);
+				console.log(JSON.parse(JSON.stringify(vals)));
 				console.log(vals[random]);
 				if(i == 0){
 					if($scope.contains(words, vals[random][0])){
@@ -1808,6 +1809,7 @@ angular.module('starter.controllers', [])
 						}
 					}else{
 						console.log("random: "+random);
+						console.log(JSON.parse(JSON.stringify(vals)));
 						vals.length--;
 						words.push(vals[random][0]);
 						console.log("2");

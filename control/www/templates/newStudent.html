@@ -9,6 +9,10 @@
     <form ng-submit="createNewStudent()">
       <div class="list">
         <label class="item item-input">
+          <span class="input-label">rut</span>
+          <input type="text" ng-model="newStudentData.rut">
+        </label>
+        <label class="item item-input">
           <span class="input-label">Nombre</span>
           <input type="text" ng-model="newStudentData.nombre">
         </label>
