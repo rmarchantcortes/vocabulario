@@ -1,6 +1,7 @@
 angular.module('starter.services', [])
 
 .service('serveLogin', function() {
+	var refresh = true;
 	var User=0;
 	var idPerson = -1;
 	var namePerson = '';
@@ -32,7 +33,13 @@ angular.module('starter.services', [])
 		array.push(idCourse);
 		return array;
 	};
+	var firstLogin = function(){
+		var result = refresh;
+		refresh = false;
+		return result;
+	}
 	return {
+		firstLogin: firstLogin,
 		isLogin: isLogin,
 		setUser: setUser,
 		getUser: getUser

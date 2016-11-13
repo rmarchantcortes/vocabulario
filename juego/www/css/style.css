@@ -19,7 +19,7 @@
 	overflow: hidden; 
 	-webkit-mask-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC);
 }
-#title2, #title3, #title4, #title5, #title6 {
+#title2, #title3, #title4, #title5, #title6, #title7, #title8 {
 	opacity: 0;
 	z-index: -100;
 }
@@ -266,6 +266,24 @@ label.labelEnabled, label.labelEnabled select{
 	padding: 0px;
 	overflow: hidden;
 }
+.link-level{
+	width:82%;
+	margin:0px;
+	float: left;
+	border-radius: 4px 0px 0px 4px;
+    border-top-right-radius: 0px !important;
+    height: 65px;
+}
+.button-level{
+	background-color:#07a032; 
+	width: 15%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	margin:0px;
+	border-radius: 0px 4px 4px 0px;
+	height: 65px;
+}
+
 /*.full-screen{
 	width: 100%;
 	height: auto;

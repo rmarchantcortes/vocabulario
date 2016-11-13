@@ -30,6 +30,7 @@ angular.module('starter.controllers', [])
 		$scope.modalAccount.hide();
 	};
 	$scope.account = function() {
+		$scope.modalLogin.hide();
 		$scope.modalAccount.show();
 	};
 	$scope.doNewAccount = function() {
@@ -230,6 +231,7 @@ angular.module('starter.controllers', [])
 		$scope.modalAccount.hide();
 	};
 	$scope.account = function() {
+		$scope.modalLogin.hide();
 		$scope.modalAccount.show();
 	};
 	$scope.doNewAccount = function() {
@@ -478,6 +480,7 @@ angular.module('starter.controllers', [])
 		$scope.modalAccount.hide();
 	};
 	$scope.account = function() {
+		$scope.modalLogin.hide();
 		$scope.modalAccount.show();
 	};
 	$scope.doNewAccount = function() {
@@ -732,12 +735,12 @@ angular.module('starter.controllers', [])
 									console.log($scope.exist);
 									$scope.hide($ionicLoading);  
 									$scope.closeNewStudent();
-									$state.go($state.current, {}, {reload: true});
+									$state.go('tab.students', {}, {reload: true});
 								},
 								function (){
 									$scope.hide($ionicLoading);  
 									var alertPopup = $ionicPopup.alert({
-												title: 'error al intentar obtener tus datos'
+												title: 'error al intentar crear al estudiante'
 									});
 									$scope.closeNewStudent();
 								}
@@ -1077,6 +1080,7 @@ angular.module('starter.controllers', [])
 		$scope.modalAccount.hide();
 	};
 	$scope.account = function() {
+		$scope.modalLogin.hide();
 		$scope.modalAccount.show();
 	};
 	$scope.doNewAccount = function() {

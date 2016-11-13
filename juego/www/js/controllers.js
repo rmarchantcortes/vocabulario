@@ -50,6 +50,7 @@ angular.module('starter.controllers', [])
 				if($scope.exist.length > 0){
 					serveLogin.setUser($scope.exist[0].id,$scope.exist[0].nombre,$scope.exist[0].apellido,$scope.exist[0].profesor,$scope.exist[0].id_curso);
 					console.log(serveLogin.getUser());
+
 					var alertPopup = $ionicPopup.alert({
 						title: 'Saludos '+$scope.exist[0].nombre
 					});
@@ -60,7 +61,10 @@ angular.module('starter.controllers', [])
 				}
 				$scope.closeLogin();
 				/*$state.go($state.current, {}, {reload: true});*/
+				console.log("app.level");
 				$state.go('app.levels', {}, {reload: true});
+				console.log("current");
+				$state.go($state.current, {}, {reload: true});
 			},
 			function (){
 				if($scope.trying==0){
@@ -86,7 +90,7 @@ angular.module('starter.controllers', [])
 
 
 
-.controller('LevelsCtrl', function($scope, $sce, $http, $ionicPopup, serveData, serveInclude, viewService, serveLevel) {
+.controller('LevelsCtrl', function($scope, $sce, $http, $ionicPopup, $state, serveData, serveInclude, viewService, serveLevel, serveLogin) {
 	viewService.setView('LevelsCtrl');
 	$scope.levels = [
 		{ title: 'Nivel 1', id: 1 , name: 'title1', ctl: 'MissingWordCtrl', alt: 3, img: 'Icon-level-01.png', link: 'missingWord', description: 'Palabra faltante'},
@@ -94,7 +98,9 @@ angular.module('starter.controllers', [])
 		{ title: 'Nivel 3', id: 3 , name: 'title3', ctl: 'ReplaceWordCtrl', alt: 3, img: 'Icon-level-03.png', link: 'replaceWord', description: 'Replazar palabra'},
 		{ title: 'Nivel 4', id: 4 , name: 'title4', ctl: 'WordIdentifierCtrl', alt: 3, img: 'Icon-level-04.png', link: 'wordIdentifier', description: 'Sinonimo o Antonimo'},
 		{ title: 'Nivel 5', id: 5 , name: 'title5', ctl: 'DoubleReplaceWordCtrl', alt: 3, img: 'Icon-level-05.png', link: 'doubleReplaceWord', description: 'Remplazar 2 palabras'},
-		{ title: 'Nivel 6', id: 6 , name: 'title6', ctl: 'TermsCoupletsCtrl', alt: 3, img: 'Icon-level-06.png', link: 'termsCouplets', description: 'terminos pareados'}
+		{ title: 'Nivel 6', id: 6 , name: 'title6', ctl: 'TermsCoupletsCtrl', alt: 3, img: 'Icon-level-06.png', link: 'termsCouplets', description: 'Terminos pareados'},
+		{ title: 'Nivel 7', id: 7 , name: 'title7', ctl: 'SynonymousCtrl', alt: 3, img: 'Icon-level-07.png', link: 'synonymous', description: 'Sinonimo o Antonimo'},
+		{ title: 'Nivel 8', id: 8 , name: 'title8', ctl: 'synonymousAntonymCtrl', alt: 3, img: 'Icon-level-08.png', link: 'synonymousAntonym', description: 'Remplazar 2 palabras'},
 	];
 			/*{ title: 'Nivel 5', id: 5 , name: 'title5', ctl: 'TermsCoupletsCtrl', alt: 3, img: 'Icon-level-05.png', link: 'termsCouplets', description: 'terminos pareados'},*/
 	$scope.startLevels = function(id) {
@@ -106,18 +112,39 @@ angular.module('starter.controllers', [])
 			}
 		});
 	};
-
+	if(serveLogin.isLogin()){
+		var lastLevel = serveData.lastLevel();
+		console.log(lastLevel);
+		for (var i = 0 ; i<lastLevel; i++) {
+			console.log("i: "+i);
+			console.log(document.getElementById("radtitle"+(i+1)));
+			document.getElementById("radtitle"+(i+1)).checked=true;
+			if(i==(lastLevel-1)){
+				console.log("if comment:  "+"comment"+(i+1));
+				console.log(document.getElementById("comment"+(i+1)));
+				document.getElementById("comment"+(i+1)).disabled="disabled";
+			}
+		}
+	}
 	$scope.$on('$ionicView.afterEnter', function(){
 		var lastLevel = serveData.lastLevel();
 		console.log(lastLevel);
 		for (var i = 0 ; i<lastLevel; i++) {
 			console.log("i: "+i);
+			console.log(document.getElementById("radtitle"+(i+1)));
 			document.getElementById("radtitle"+(i+1)).checked=true;
 			if(i==(lastLevel-1)){
 				console.log("if comment:  "+"comment"+(i+1));
+				console.log(document.getElementById("comment"+(i+1)));
 				document.getElementById("comment"+(i+1)).disabled="disabled";
 			}
 		}
+		if(serveLogin.isLogin() && serveLogin.firstLogin()){
+			console.log(serveLogin.firstLogin());
+			//$state.go($state.current, {}, {reload: true});
+			$state.go('app.levels', {}, {reload: true});
+		}
+		
 	});
 })
 
@@ -673,6 +700,31 @@ angular.module('starter.controllers', [])
 	$scope.pasarNivel= function(id){
 		if(successfulGame){
 			serveData.setLastLevel(id);
+			if(serveLogin.isLogin()){
+				$scope.show($ionicLoading);
+				$scope.scoreSend = {puntaje:$scope.score, fecha: new Date(), id_persona: parseInt(serveLogin.getUser()[0]),id_desafio: serveLevel.idChallenge(),id_juego:1};
+				console.log($scope.scoreSend);
+				var objJSON = JSON.stringify($scope.scoreSend);
+				var urlCompleta ="http://www.vocabulario.esy.es/InsertScoreService.php";
+				var postUrl = $sce.trustAsResourceUrl(urlCompleta);
+				$http.post(postUrl, objJSON)
+				.then(
+					function (response) {
+						$scope.vocabulary = response.data;
+						$scope.hide($ionicLoading);  
+					},
+					function (){
+						if($scope.trying==0){
+							$scope.loadBefore();
+							$scope.trying = $scope.trying+1;
+						}else{
+							$scope.hide($ionicLoading);  
+							$scope.showAlertPopUp('Error', 'No se han podido guardar los datos');
+							$state.go('app.levels', {}, {reload: true});
+						}
+					}
+				);
+			}
 		}
 	};
 })
@@ -683,7 +735,7 @@ angular.module('starter.controllers', [])
 
 
 
-.controller('WordIdentifierCtrl', function($scope, $http, $sce, $ionicLoading, $compile, $ionicPopup, $state, $timeout, serveInclude, serveData, serveLogin, viewService) {
+.controller('WordIdentifierCtrl', function($scope, $http, $sce, $ionicLoading, $compile, $ionicPopup, $state, $timeout, serveInclude, serveData, serveLogin, viewService, serveLevel) {
 	viewService.setView('WordIdentifierCtrl');
 	var page = angular.element(document.getElementById('contenedor'));
 	var card = document.createElement('div');
@@ -752,6 +804,7 @@ angular.module('starter.controllers', [])
 						$scope.numdata = 4;
 						break;
 				}*/
+				$scope.trying=0;
 				if($scope.showGame()==true){
 					$scope.hide($ionicLoading);
 					$scope.showAlertPopUp('Identifica la palabra', 'Intrucciones: Se presentará una palabra y un texto con otra palabra resaltada, debes identificar si estas palabras son sinónimos o antónimos', true);
@@ -961,6 +1014,31 @@ angular.module('starter.controllers', [])
 	$scope.pasarNivel= function(id){
 		if(successfulGame){
 			serveData.setLastLevel(id);
+			if(serveLogin.isLogin()){
+				$scope.show($ionicLoading);
+				$scope.scoreSend = {puntaje:$scope.score, fecha: new Date(), id_persona: parseInt(serveLogin.getUser()[0]),id_desafio: serveLevel.idChallenge(),id_juego:1};
+				console.log($scope.scoreSend);
+				var objJSON = JSON.stringify($scope.scoreSend);
+				var urlCompleta ="http://www.vocabulario.esy.es/InsertScoreService.php";
+				var postUrl = $sce.trustAsResourceUrl(urlCompleta);
+				$http.post(postUrl, objJSON)
+				.then(
+					function (response) {
+						$scope.vocabulary = response.data;
+						$scope.hide($ionicLoading);  
+					},
+					function (){
+						if($scope.trying==0){
+							$scope.loadBefore();
+							$scope.trying = $scope.trying+1;
+						}else{
+							$scope.hide($ionicLoading);  
+							$scope.showAlertPopUp('Error', 'No se han podido guardar los datos');
+							$state.go('app.levels', {}, {reload: true});
+						}
+					}
+				);
+			}
 		}
 	};
 })
@@ -1047,6 +1125,31 @@ angular.module('starter.controllers', [])
 	$scope.pasarNivel= function(id){
 		if(successfulGame){
 			serveData.setLastLevel(id);
+			if(serveLogin.isLogin()){
+				$scope.show($ionicLoading);
+				$scope.scoreSend = {puntaje:$scope.score, fecha: new Date(), id_persona: parseInt(serveLogin.getUser()[0]),id_desafio: serveLevel.idChallenge(),id_juego:1};
+				console.log($scope.scoreSend);
+				var objJSON = JSON.stringify($scope.scoreSend);
+				var urlCompleta ="http://www.vocabulario.esy.es/InsertScoreService.php";
+				var postUrl = $sce.trustAsResourceUrl(urlCompleta);
+				$http.post(postUrl, objJSON)
+				.then(
+					function (response) {
+						$scope.vocabulary = response.data;
+						$scope.hide($ionicLoading);  
+					},
+					function (){
+						if($scope.trying==0){
+							$scope.loadBefore();
+							$scope.trying = $scope.trying+1;
+						}else{
+							$scope.hide($ionicLoading);  
+							$scope.showAlertPopUp('Error', 'No se han podido guardar los datos');
+							$state.go('app.levels', {}, {reload: true});
+						}
+					}
+				);
+			}
 		}
 	};
 	$scope.gameOverForTime = function(){
@@ -1629,6 +1732,31 @@ angular.module('starter.controllers', [])
 	$scope.pasarNivel= function(id){
 		if(successfulGame){
 			//serveData.setLastLevel(id);
+			if(serveLogin.isLogin()){
+				$scope.show($ionicLoading);
+				$scope.scoreSend = {puntaje:$scope.score, fecha: new Date(), id_persona: parseInt(serveLogin.getUser()[0]),id_desafio: serveLevel.idChallenge(),id_juego:1};
+				console.log($scope.scoreSend);
+				var objJSON = JSON.stringify($scope.scoreSend);
+				var urlCompleta ="http://www.vocabulario.esy.es/InsertScoreService.php";
+				var postUrl = $sce.trustAsResourceUrl(urlCompleta);
+				$http.post(postUrl, objJSON)
+				.then(
+					function (response) {
+						$scope.vocabulary = response.data;
+						$scope.hide($ionicLoading);  
+					},
+					function (){
+						if($scope.trying==0){
+							$scope.loadBefore();
+							$scope.trying = $scope.trying+1;
+						}else{
+							$scope.hide($ionicLoading);  
+							$scope.showAlertPopUp('Error', 'No se han podido guardar los datos');
+							$state.go('app.levels', {}, {reload: true});
+						}
+					}
+				);
+			}
 		}
 	};
 	$scope.gameOverForTime = function(){
@@ -1894,7 +2022,7 @@ angular.module('starter.controllers', [])
 
 
 
-.controller('ReplaceWordCtrl', function($scope, $http, $sce, $ionicLoading, $state, $compile, $ionicPopup, $timeout, serveInclude, serveData, serveLogin, viewService) {
+.controller('ReplaceWordCtrl', function($scope, $http, $sce, $ionicLoading, $state, $compile, $ionicPopup, $timeout, serveInclude, serveData, serveLogin, viewService, serveLevel) {
 	viewService.setView('ReplaceWordCtrl');
 	var page = angular.element(document.getElementById('contenedor'));
 	var card = document.createElement('div');
@@ -1967,6 +2095,31 @@ angular.module('starter.controllers', [])
 	$scope.pasarNivel= function(id){
 		if(successfulGame){
 			serveData.setLastLevel(id);
+			if(serveLogin.isLogin()){
+				$scope.show($ionicLoading);
+				$scope.scoreSend = {puntaje:$scope.score, fecha: new Date(), id_persona: parseInt(serveLogin.getUser()[0]),id_desafio: serveLevel.idChallenge(),id_juego:1};
+				console.log($scope.scoreSend);
+				var objJSON = JSON.stringify($scope.scoreSend);
+				var urlCompleta ="http://www.vocabulario.esy.es/InsertScoreService.php";
+				var postUrl = $sce.trustAsResourceUrl(urlCompleta);
+				$http.post(postUrl, objJSON)
+				.then(
+					function (response) {
+						$scope.vocabulary = response.data;
+						$scope.hide($ionicLoading);  
+					},
+					function (){
+						if($scope.trying==0){
+							$scope.loadBefore();
+							$scope.trying = $scope.trying+1;
+						}else{
+							$scope.hide($ionicLoading);  
+							$scope.showAlertPopUp('Error', 'No se han podido guardar los datos');
+							$state.go('app.levels', {}, {reload: true});
+						}
+					}
+				);
+			}
 		}
 	};
 	$scope.gameOverForTime = function(){
@@ -2053,6 +2206,7 @@ angular.module('starter.controllers', [])
 				$scope.vocabulary = response.data;
 				vocabularyLength = $scope.vocabulary.length;
 				console.log(vocabularyLength);
+				$scope.trying=0;
 				switch(serveInclude.getPage()){
 					case 3:
 						console.log('case 1');
@@ -2246,6 +2400,31 @@ angular.module('starter.controllers', [])
 	$scope.pasarNivel= function(id){
 		if(successfulGame){
 			serveData.setLastLevel(id);
+			if(serveLogin.isLogin()){
+				$scope.show($ionicLoading);
+				$scope.scoreSend = {puntaje:$scope.score, fecha: new Date(), id_persona: parseInt(serveLogin.getUser()[0]),id_desafio: serveLevel.idChallenge(),id_juego:1};
+				console.log($scope.scoreSend);
+				var objJSON = JSON.stringify($scope.scoreSend);
+				var urlCompleta ="http://www.vocabulario.esy.es/InsertScoreService.php";
+				var postUrl = $sce.trustAsResourceUrl(urlCompleta);
+				$http.post(postUrl, objJSON)
+				.then(
+					function (response) {
+						$scope.vocabulary = response.data;
+						$scope.hide($ionicLoading);  
+					},
+					function (){
+						if($scope.trying==0){
+							$scope.loadBefore();
+							$scope.trying = $scope.trying+1;
+						}else{
+							$scope.hide($ionicLoading);  
+							$scope.showAlertPopUp('Error', 'No se han podido guardar los datos');
+							$state.go('app.levels', {}, {reload: true});
+						}
+					}
+				);
+			}
 		}
 	};
 	$scope.gameOverForTime = function(){
@@ -2461,14 +2640,14 @@ angular.module('starter.controllers', [])
 	$scope.default = {image : 'default.png'};
 	$scope.user = serveLogin.getUser();
 	console.log("challengeDetail");
-	$scope.levels = [
-		{ title: 'Nivel 1', id: 1 , name: 'title1', ctl: 'MissingWordCtrl', alt: 3, img: 'Icon-level-01.png', link: 'missingWord', description: 'Rellena el espacio faltante'},
-		{ title: 'Nivel 2', id: 2 , name: 'title2', ctl: 'MissingWordCtrl', alt: 4, img: 'Icon-level-02.png', link: 'missingWord', description: 'Rellena el espacio faltante'},
-		{ title: 'Nivel 3', id: 3 , name: 'title3', ctl: 'ReplaceWordCtrl', alt: 3, img: 'Icon-level-03.png', link: 'replaceWord', description: 'Busca un sinónimo'},
-		{ title: 'Nivel 4', id: 4 , name: 'title4', ctl: 'WordIdentifierCtrl', alt: 3, img: 'Icon-level-04.png', link: 'wordIdentifier', description: 'Sinonimos o Antonimos en una oración'},
-		{ title: 'Nivel 5', id: 5 , name: 'title5', ctl: 'TermsCoupletsCtrl', alt: 3, img: 'Icon-level-05.png', link: 'termsCouplets', description: 'Sinonimos 3 alternativas'},
-		{ title: 'Nivel 6', id: 6 , name: 'title6', ctl: 'DoubleReplaceWordCtrl', alt: 3, img: 'Icon-level-06.png', link: 'doubleReplaceWord', description: 'Sinonimos 3 alternativas'},
-		{ title: 'Sinónimos', id: 7 , name: 'title6', ctl: 'SynonymousCtrl', alt: 3, img: 'Icon-level-06.png', link: 'doubleReplaceWord', description: 'Sinonimos 3 alternativas'}
+	$scope.selectOptions =[
+		{ title: 'sinoninos', id: 7 , name: 'title1', img: 'crayons.jpg', link: 'synonymous'},
+		{ title: 'sinonimos y antonimos', id: 8 , name: 'title2', img: 'libros.jpg', link: 'synonymous'},
+		{ title: 'Palabra faltante', id: 1 , name: 'title3', img: 'letras.jpg', link: 'synonymousAntonym'},
+		{ title: 'Reemplaza la palabra', id: 3 , name: 'title4', img: 'lenguas.png', link: 'synonymous.html'},
+		{ title: 'Reemplaza la palabra x2', id: 5 , name: 'title4', img: 'lenguas.png', link: 'synonymous.html'},
+		{ title: '¿Sinónimo o Antonimo?', id: 4 , name: 'title5', img: 'idiomas.png', link: 'synonymous.html'},
+		{ title: 'Terminos Pareados', id: 6 , name: 'title6', img: 'crucigramas.jpg', link: 'synonymous.html'}
 	];
 	
 	console.log($scope.user);
@@ -2566,12 +2745,13 @@ angular.module('starter.controllers', [])
 	document.getElementById('lblCourse').className= "item item-input item-select labelDisabled";
 	document.getElementById('comboCourse').disabled=true;
 	$scope.selectOptions =[
-		{ title: 'Nivel 1', id: 1 , name: 'title1', img: 'crayons.jpg', link: 'synonymous'},
-		{ title: 'Nivel 2', id: 2 , name: 'title2', img: 'libros.jpg', link: 'synonymous'},
-		{ title: 'Nivel 3', id: 3 , name: 'title3', img: 'letras.jpg', link: 'synonymousAntonym'},
-		{ title: 'Nivel 4', id: 4 , name: 'title4', img: 'lenguas.png', link: 'synonymous.html'},
-		{ title: 'Nivel 5', id: 5 , name: 'title5', img: 'idiomas.png', link: 'synonymous.html'},
-		{ title: 'Nivel 6', id: 6 , name: 'title6', img: 'crucigramas.jpg', link: 'synonymous.html'}
+		{ title: 'sinoninos', id: 7 , name: 'title1', img: 'crayons.jpg', link: 'synonymous'},
+		{ title: 'sinonimos y antonimos', id: 8 , name: 'title2', img: 'libros.jpg', link: 'synonymous'},
+		{ title: 'Palabra faltante', id: 1 , name: 'title3', img: 'letras.jpg', link: 'synonymousAntonym'},
+		{ title: 'Reemplaza la palabra', id: 3 , name: 'title4', img: 'lenguas.png', link: 'synonymous.html'},
+		{ title: 'Reemplaza la palabra x2', id: 5 , name: 'title4', img: 'lenguas.png', link: 'synonymous.html'},
+		{ title: '¿Sinónimo o Antonimo?', id: 4 , name: 'title5', img: 'idiomas.png', link: 'synonymous.html'},
+		{ title: 'Terminos Pareados', id: 6 , name: 'title6', img: 'crucigramas.jpg', link: 'synonymous.html'}
 	];
 	$scope.selectedselectedLvl;
 	$scope.selectedOrg;
