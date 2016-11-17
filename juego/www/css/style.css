@@ -277,6 +277,7 @@ label.labelEnabled, label.labelEnabled select{
 .button-level{
 	background-color:#07a032; 
 	width: 15%;
+	min-width: 0px;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	margin:0px;
