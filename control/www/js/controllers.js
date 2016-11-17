@@ -442,31 +442,41 @@ angular.module('starter.controllers', [])
 		$scope.modalNewOrganization.hide();
 	};
 	$scope.createNewOrganization = function() {
-		console.log('Doing new organization', $scope.newOrganizationData);
-		$scope.addNewOrganization = {username : '', password : ''};
-		var entity = $scope.user;
-		var objJSON = JSON.stringify($scope.newOrganizationData);
-		// Do the call to a service using $http or directly do the call here
-		var urlCompleta ="http://www.vocabulario.esy.es/InsertNewOrganizationService.php";
-		var postUrl = $sce.trustAsResourceUrl(urlCompleta);
-		console.log(objJSON);
-		$http.post(postUrl, objJSON)
-		.then(
-		function (response) {
-									$scope.exist = response.data;
-									console.log($scope.exist);
-									$scope.hide($ionicLoading);  
-									$scope.closeNewOrganization();
-									$state.go($state.current, {}, {reload: true});
-								},
-								function (){
-									$scope.hide($ionicLoading);  
-									var alertPopup = $ionicPopup.alert({
-												title: 'error al intentar obtener tus datos'
-									});
-									$scope.closeLogin();
-								}
-		);
+		if($scope.newOrganizationData.nombre != null && $scope.newOrganizationData.tipo != null){
+			console.log('Doing new organization', $scope.newOrganizationData);
+			$scope.addNewOrganization = {username : '', password : ''};
+			var entity = $scope.user;
+			var objJSON = JSON.stringify($scope.newOrganizationData);
+			// Do the call to a service using $http or directly do the call here
+			var urlCompleta ="http://www.vocabulario.esy.es/InsertNewOrganizationService.php";
+			var postUrl = $sce.trustAsResourceUrl(urlCompleta);
+			console.log(objJSON);
+			$http.post(postUrl, objJSON)
+			.then(
+			function (response) {
+										$scope.exist = response.data;
+										console.log($scope.exist);
+										$scope.hide($ionicLoading);  
+										$scope.closeNewOrganization();
+										var alertPopup = $ionicPopup.alert({
+											title: 'El establecimiento ha sido creado con exito'
+										});
+										$state.go($state.current, {}, {reload: true});
+									},
+									function (){
+										$scope.hide($ionicLoading);  
+										var alertPopup = $ionicPopup.alert({
+											title: 'error al intentar obtener tus datos'
+										});
+										$scope.closeLogin();
+									}
+			);
+		}else{
+			var alertPopup = $ionicPopup.alert({
+				title: 'No ha rellenado todos los campos necesarios'
+			});
+		}
+		
 	}
 	$scope.newAccount = {};
 
@@ -630,30 +640,40 @@ angular.module('starter.controllers', [])
 		$scope.modalNewCourse.hide();
 	};
 	$scope.createNewCourse = function() {
-		console.log('Doing new Course', $scope.newCourseData);
-		var entity = $scope.user;
-		var objJSON = JSON.stringify($scope.newCourseData);
-		// Do the call to a service using $http or directly do the call here
-		var urlCompleta ="http://www.vocabulario.esy.es/InsertNewCourseService.php";
-		var postUrl = $sce.trustAsResourceUrl(urlCompleta);
-		console.log(objJSON);
-		$http.post(postUrl, objJSON)
-		.then(
-		function (response) {
-									$scope.exist = response.data;
-									console.log($scope.exist);
-									$scope.hide($ionicLoading);  
-									$scope.closeNewCourse();
-									$state.go($state.current, {}, {reload: true});
-								},
-								function (){
-									$scope.hide($ionicLoading);  
-									var alertPopup = $ionicPopup.alert({
-												title: 'error al intentar obtener tus datos'
-									});
-									$scope.closeNewCourse();
-								}
-		);
+		if($scope.newCourseData.nombre !=null && $scope.newCourseData.nivel != null){
+			console.log('Doing new Course', $scope.newCourseData);
+			var entity = $scope.user;
+			var objJSON = JSON.stringify($scope.newCourseData);
+			// Do the call to a service using $http or directly do the call here
+			var urlCompleta ="http://www.vocabulario.esy.es/InsertNewCourseService.php";
+			var postUrl = $sce.trustAsResourceUrl(urlCompleta);
+			console.log(objJSON);
+			$http.post(postUrl, objJSON)
+			.then(
+			function (response) {
+					$scope.exist = response.data;
+					console.log($scope.exist);
+					$scope.hide($ionicLoading);  
+					$scope.closeNewCourse();
+					var alertPopup = $ionicPopup.alert({
+						title: 'El curso a sido creado con exito'
+					});
+					$state.go($state.current, {}, {reload: true});
+				},
+				function (){
+					$scope.hide($ionicLoading);  
+					var alertPopup = $ionicPopup.alert({
+								title: 'error al intentar obtener tus datos'
+					});
+					$scope.closeNewCourse();
+				}
+			);
+		}else{
+			var alertPopup = $ionicPopup.alert({
+				title: 'No ha rellenado todos los campos necesarios'
+			});
+		}
+		
 	}
 	var defaultHTTPHeaders = {
 		'Content-Type': 'application/json',
@@ -670,7 +690,7 @@ angular.module('starter.controllers', [])
 	$scope.callToAddToClassList = function(idObj, nameObj){
 				productService.addClass(idObj, nameObj);
 				console.log(idObj+"===="+nameObj);
-		};
+	};
 	$http.defaults.headers.post =defaultHTTPHeaders;
 	console.log($scope.Organization);
 	$scope.curso = {
@@ -678,7 +698,7 @@ angular.module('starter.controllers', [])
 		nivel: '',
 		id_organizacion : $scope.Organization[0]
 	};
-
+	$scope.callCourses = function(){
 		var urlCompleta ="http://www.vocabulario.esy.es/persistirClassService.php";
 		var postUrl = $sce.trustAsResourceUrl(urlCompleta);
 		$scope.show($ionicLoading);
@@ -694,6 +714,7 @@ angular.module('starter.controllers', [])
 									console.log('Error al importar los Establecimientos');
 								}
 		);
+	};
 })
 
 
@@ -721,30 +742,40 @@ angular.module('starter.controllers', [])
 				console.log(idObj+"===="+nameObj);
 	};
 	$scope.createNewStudent = function() {
-		console.log('Doing new Student', $scope.newStudentData);
-		var entity = $scope.user;
-		var objJSON = JSON.stringify($scope.newStudentData);
-		// Do the call to a service using $http or directly do the call here
-		var urlCompleta ="http://www.vocabulario.esy.es/InsertNewStudentService.php";
-		var postUrl = $sce.trustAsResourceUrl(urlCompleta);
-		console.log(objJSON);
-		$http.post(postUrl, objJSON)
-		.then(
-		function (response) {
-									$scope.exist = response.data;
-									console.log($scope.exist);
-									$scope.hide($ionicLoading);  
-									$scope.closeNewStudent();
-									$state.go('tab.students', {}, {reload: true});
-								},
-								function (){
-									$scope.hide($ionicLoading);  
-									var alertPopup = $ionicPopup.alert({
-												title: 'error al intentar crear al estudiante'
-									});
-									$scope.closeNewStudent();
-								}
-		);
+		if($scope.newStudentData.nombre != null && $scope.newStudentData.rut != null && $scope.newStudentData.apellido != null){
+			console.log('Doing new Student', $scope.newStudentData);
+			var entity = $scope.user;
+			var objJSON = JSON.stringify($scope.newStudentData);
+			// Do the call to a service using $http or directly do the call here
+			var urlCompleta ="http://www.vocabulario.esy.es/InsertNewStudentService.php";
+			var postUrl = $sce.trustAsResourceUrl(urlCompleta);
+			console.log(objJSON);
+			$http.post(postUrl, objJSON)
+			.then(
+			function (response) {
+										$scope.exist = response.data;
+										console.log($scope.exist);
+										$scope.newStudentData = {'id_curso': $scope.Class[0]};
+										$scope.hide($ionicLoading);  
+										$scope.closeNewStudent();
+										var alertPopup = $ionicPopup.alert({
+											title: 'El estudiante ha sido creado con exito'
+										});
+										$state.go($state.current, {}, {reload: true});
+									},
+									function (){
+										$scope.hide($ionicLoading);  
+										var alertPopup = $ionicPopup.alert({
+													title: 'error al intentar crear al estudiante'
+										});
+										$scope.closeNewStudent();
+									}
+			);
+		}else{
+			var alertPopup = $ionicPopup.alert({
+				title: 'No ha rellenado todos los campos necesarios'
+			});
+		}
 	}
 	var defaultHTTPHeaders = {
 		'Content-Type': 'application/json',

@@ -5,7 +5,8 @@
       <i class="icon icon-left ion-university"></i>
     </button>
   </ion-nav-buttons>
-  <ion-content>
+  <ion-content  class="padding">
+    <div ng-init="callCourses()">
       <ion-list >
         <ion-item class="item-remove-animate item-avatar item-icon-right"  ng-repeat="curso in cursos" ng-click="callToAddToClassList(curso.id, curso.nombre)" href="#/tab/organizations/{{organization.id}}/{{curso.id}}">
           <img ng-src="img/curso.png">
@@ -13,5 +14,6 @@
           <p>{{curso.nivel}}</p>
         </ion-item>
       </ion-list>
+    </div>
   </ion-content>
 </ion-view>

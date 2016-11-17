@@ -82,6 +82,41 @@ angular.module('starter.controllers', [])
 			}
 		);
 	};
+	$scope.mediaMusic = null;
+	$scope.media = null;
+	/*$scope.model = {
+		showDelete: false,
+		showMove: false,
+		sounds: [
+			{
+				'title': 'good',
+				'file': '/sounds/good.mp3'
+			},
+			{
+				'title': 'fail',
+				'file': '/sounds/fail.mp3'
+			},
+			{
+				'title': 'time',
+				'file': '/sounds/time.mp3'
+			},
+		]
+	};*/
+	$scope.pauseMusic = function (){
+		$scope.mediaMusic.pause();
+	}
+	$scope.playMusic = function (){
+		$scope.mediaMusic = new Audio();
+		$scope.mediaMusic.src = '/sounds/music.mp3';
+		$scope.mediaMusic.load();
+		$scope.mediaMusic.play();
+	};
+	$scope.play = function (sound){
+		$scope.media = new Audio();
+		$scope.media.src = sound;
+		$scope.media.load();
+		$scope.media.play();
+	};
 })
 
 
@@ -112,7 +147,8 @@ angular.module('starter.controllers', [])
 			}
 		});
 	};
-	if(serveLogin.isLogin()){
+
+	/*if(serveLogin.isLogin()){
 		var lastLevel = serveData.lastLevel();
 		console.log(lastLevel);
 		for (var i = 0 ; i<lastLevel; i++) {
@@ -125,7 +161,7 @@ angular.module('starter.controllers', [])
 				document.getElementById("comment"+(i+1)).disabled="disabled";
 			}
 		}
-	}
+	}*/
 	$scope.$on('$ionicView.afterEnter', function(){
 		var lastLevel = serveData.lastLevel();
 		console.log(lastLevel);
@@ -241,6 +277,7 @@ angular.module('starter.controllers', [])
 
 .controller('TermsCoupletsCtrl', function($scope, $http, $sce, $ionicLoading, $compile, $ionicPopup, $state, $timeout, serveInclude, serveData, serveLogin, viewService) {
 	viewService.setView('TermsCoupletsCtrl');
+	$scope.playMusic();
 	var page = angular.element(document.getElementById('contenedor'));
 	var card = document.createElement('div');
 	var words = [];
@@ -698,6 +735,7 @@ angular.module('starter.controllers', [])
 		return false;
 	};
 	$scope.pasarNivel= function(id){
+		$scope.pauseMusic();
 		if(successfulGame){
 			serveData.setLastLevel(id);
 			if(serveLogin.isLogin()){
@@ -737,6 +775,7 @@ angular.module('starter.controllers', [])
 
 .controller('WordIdentifierCtrl', function($scope, $http, $sce, $ionicLoading, $compile, $ionicPopup, $state, $timeout, serveInclude, serveData, serveLogin, viewService, serveLevel) {
 	viewService.setView('WordIdentifierCtrl');
+	$scope.playMusic();
 	var page = angular.element(document.getElementById('contenedor'));
 	var card = document.createElement('div');
 	var words = [];
@@ -760,6 +799,10 @@ angular.module('starter.controllers', [])
 					$timeout(update, 1000);
 					if($scope.startGame){
 						$scope.timer -= 1;
+						if($scope.timer<=5){
+							console.log("sound");
+							$scope.play('/sounds/time.wav');
+						}
 					}
 				}else{
 					$scope.timer = 0;
@@ -944,6 +987,7 @@ angular.module('starter.controllers', [])
 	$scope.itemSelected= function(id){
 		times++;
 		if($scope.answer==id){
+			$scope.play('/sounds/good.wav');
 			$scope.score += 10;
 			if(vocabularyLength>0 && times<10){
 				//$scope.showAlertPopUp('Muy Bien', null);
@@ -960,6 +1004,7 @@ angular.module('starter.controllers', [])
 			}
 		}else{
 			$scope.score -= 2;
+			$scope.play('/sounds/fail.wav');
 			if(vocabularyLength>0 && times<10){
 				//$scope.showAlertPopUp('Fallaste, intenta en la siguiente', null);
 				$scope.timer=20;
@@ -1012,6 +1057,7 @@ angular.module('starter.controllers', [])
 		$scope.setScore();
 	};
 	$scope.pasarNivel= function(id){
+		$scope.pauseMusic();
 		if(successfulGame){
 			serveData.setLastLevel(id);
 			if(serveLogin.isLogin()){
@@ -1051,8 +1097,9 @@ angular.module('starter.controllers', [])
 
 
 
-.controller('synonymousAntonymCtrl', function($scope, $http, $sce, $ionicLoading, $compile, $ionicPopup, $timeout, serveInclude, serveData, serveLogin, viewService) {
+.controller('synonymousAntonymCtrl', function($scope, $http, $sce, $ionicLoading, $compile, $ionicPopup, $state, $timeout, serveInclude, serveData, serveLogin, viewService, serveLevel) {
 	viewService.setView('synonymousAntonymCtrl');
+	$scope.playMusic();
 	var page = angular.element(document.getElementById('contenedor'));
 	var card = document.createElement('div');
 	var words = [];
@@ -1078,6 +1125,10 @@ angular.module('starter.controllers', [])
 					$timeout(update, 1000);
 					if($scope.startGame){
 						$scope.timer -= 1;
+						if($scope.timer<=5){
+							console.log("sound");
+							$scope.play('/sounds/time.wav');
+						}
 					}
 				}else{
 					$scope.timer = 0;
@@ -1123,6 +1174,7 @@ angular.module('starter.controllers', [])
 		}
 	};
 	$scope.pasarNivel= function(id){
+		$scope.pauseMusic();
 		if(successfulGame){
 			serveData.setLastLevel(id);
 			if(serveLogin.isLogin()){
@@ -1160,6 +1212,7 @@ angular.module('starter.controllers', [])
 		times++;
 		if($scope.id==id){
 			$scope.score += 10;
+			$scope.play('/sounds/good.wav');
 			if(vocabularyLength>0 && times<10){
 				//$scope.showAlertPopUp('Muy Bien', null);
 				$scope.timer = 20;
@@ -1175,6 +1228,7 @@ angular.module('starter.controllers', [])
 			}
 		}else{
 			$scope.score -= 2;
+			$scope.play('/sounds/fail.wav');
 			if(vocabularyLength>0 && times<10){
 				//$scope.showAlertPopUp('Fallaste, intenta en la siguiente', null);
 				$scope.timer=20;
@@ -1236,23 +1290,22 @@ angular.module('starter.controllers', [])
 				$scope.vocabulary = response.data;
 				vocabularyLength = $scope.vocabulary.length;
 				console.log(vocabularyLength);
-				switch(serveInclude.getPage()){
-					case 3:
-						console.log('case 1');
-						$scope.numdata = 3;
-						break;
-					case 4:
-						console.log('case 2');
-						$scope.numdata = 4;
-						break;
-				}
-				if($scope.showGame()==true){
-					$scope.hide($ionicLoading);
-					$scope.showAlertPopUp('Sinónimos y antónimos', 'Intrucciones: debes identificar si la palabra expuesta es sinónimo ó antónimo con alguna de las alternativas, recuerda puede ser un sinónimo ó un antónimo!', true);
-					$scope.timer=20;
+				console.log(serveLevel.isLevel('synonymousAntonymCtrl'));
+				if(serveLevel.isLevel('synonymousAntonymCtrl')){
+					$scope.numdata = serveLevel.getLevelParam();
+					if($scope.showGame()){
+						$scope.hide($ionicLoading);  
+						$scope.showAlertPopUp('Reemplaza la palabra x2', 'Intrucciones: Selecciona los sinónimos que encajen en los espacios del texto', true);
+						$scope.timer=20;
+					}else{
+						$scope.hide($ionicLoading); 
+						$scope.showAlertPopUp('Ha ocurrido un error', 'porfavor, vuelve a cargar el minijuego show');
+						$state.go('app.levels', {}, {reload: true});
+					}
 				}else{
 					$scope.hide($ionicLoading); 
 					$scope.showAlertPopUp('Ha ocurrido un error', 'porfavor, vuelve a cargar el minijuego');
+					$state.go('app.levels', {}, {reload: true});
 				}
 			},
 			function (){
@@ -1349,6 +1402,7 @@ angular.module('starter.controllers', [])
 
 .controller('MissingWordCtrl', function($scope, $http, $sce, $ionicLoading, $state, $compile, $ionicPopup, $timeout, serveInclude, serveData, serveLogin, viewService, serveLevel) {
 	viewService.setView('MissingWordCtrl');
+	$scope.playMusic();
 	var page = angular.element(document.getElementById('contenedor'));
 	var card = document.createElement('div');
 	var words = [];
@@ -1374,6 +1428,10 @@ angular.module('starter.controllers', [])
 					$timeout(update, 1000);
 					if($scope.startGame){
 						$scope.timer -= 1;
+						if($scope.timer<=5){
+							console.log("sound");
+							$scope.play('/sounds/time.wav');
+						}
 					}
 				}else{
 					$scope.timer = 0;
@@ -1418,6 +1476,7 @@ angular.module('starter.controllers', [])
 		}
 	};
 	$scope.pasarNivel= function(id){
+		$scope.pauseMusic();
 		if(successfulGame){
 			serveData.setLastLevel(id);
 			if(serveLogin.isLogin()){
@@ -1455,6 +1514,7 @@ angular.module('starter.controllers', [])
 		times++;
 		if($scope.id==id){
 			$scope.score += 10;
+			$scope.play('/sounds/good.wav');
 			if(vocabularyLength>0 && times<10){
 				//$scope.showAlertPopUp('Muy Bien', null);
 				$scope.timer = 20;
@@ -1470,6 +1530,7 @@ angular.module('starter.controllers', [])
 			}
 		}else{
 			$scope.score -= 2;
+			$scope.play('/sounds/fail.wav');
 			if(vocabularyLength>0 && times<10){
 				//$scope.showAlertPopUp('Fallaste, intenta en la siguiente', null);
 				$scope.timer=20;
@@ -1660,6 +1721,7 @@ angular.module('starter.controllers', [])
 
 .controller('DoubleReplaceWordCtrl', function($scope, $http, $sce, $ionicLoading, $state, $compile, $ionicPopup, $timeout, serveInclude, serveData, serveLogin, viewService, serveLevel) {
 	viewService.setView('DoubleReplaceWordCtrl');
+	$scope.playMusic();
 	var page = angular.element(document.getElementById('contenedor'));
 	var card = document.createElement('div');
 	var words = [];
@@ -1686,6 +1748,10 @@ angular.module('starter.controllers', [])
 					$timeout(update, 1000);
 					if($scope.startGame){
 						$scope.timer -= 1;
+						if($scope.timer<=5){
+							console.log("sound");
+							$scope.play('/sounds/time.wav');
+						}
 					}
 				}else{
 					$scope.timer = 0;
@@ -1730,6 +1796,7 @@ angular.module('starter.controllers', [])
 		}
 	};
 	$scope.pasarNivel= function(id){
+		$scope.pauseMusic();
 		if(successfulGame){
 			//serveData.setLastLevel(id);
 			if(serveLogin.isLogin()){
@@ -1767,6 +1834,7 @@ angular.module('starter.controllers', [])
 		times++;
 		if($scope.id==id){
 			$scope.score += 10;
+			$scope.play('/sounds/good.wav');
 			if(vals.length>0 && times<10){
 				//$scope.showAlertPopUp('Muy Bien', null);
 				$scope.timer=20;
@@ -1783,6 +1851,7 @@ angular.module('starter.controllers', [])
 			}
 		}else{
 			$scope.score -= 2;
+			$scope.play('/sounds/fail.wav');
 			if(vals.length>0 && times<10){
 				//$scope.showAlertPopUp('Fallaste, intenta en la siguiente', null);
 				$scope.timer=20;
@@ -2024,6 +2093,7 @@ angular.module('starter.controllers', [])
 
 .controller('ReplaceWordCtrl', function($scope, $http, $sce, $ionicLoading, $state, $compile, $ionicPopup, $timeout, serveInclude, serveData, serveLogin, viewService, serveLevel) {
 	viewService.setView('ReplaceWordCtrl');
+	$scope.playMusic();
 	var page = angular.element(document.getElementById('contenedor'));
 	var card = document.createElement('div');
 	var words = [];
@@ -2049,6 +2119,10 @@ angular.module('starter.controllers', [])
 					$timeout(update, 1000);
 					if($scope.startGame){
 						$scope.timer -= 1;
+						if($scope.timer<=5){
+							console.log("sound");
+							$scope.play('/sounds/time.wav');
+						}
 					}
 				}else{
 					$scope.timer = 0;
@@ -2093,6 +2167,7 @@ angular.module('starter.controllers', [])
 		}
 	};
 	$scope.pasarNivel= function(id){
+		$scope.pauseMusic();
 		if(successfulGame){
 			serveData.setLastLevel(id);
 			if(serveLogin.isLogin()){
@@ -2130,6 +2205,7 @@ angular.module('starter.controllers', [])
 		times++;
 		if($scope.id==id){
 			$scope.score += 10;
+			$scope.play('/sounds/good.wav');
 			if(vocabularyLength>0 && times<10){
 				//$scope.showAlertPopUp('Muy Bien', null);
 				$scope.timer = 20;
@@ -2145,6 +2221,7 @@ angular.module('starter.controllers', [])
 			}
 		}else{
 			$scope.score -= 2;
+			$scope.play('/sounds/fail.wav');
 			if(vocabularyLength>0 && times<10){
 				//$scope.showAlertPopUp('Fallaste, intenta en la siguiente', null);
 				$scope.timer=20;
@@ -2207,20 +2284,17 @@ angular.module('starter.controllers', [])
 				vocabularyLength = $scope.vocabulary.length;
 				console.log(vocabularyLength);
 				$scope.trying=0;
-				switch(serveInclude.getPage()){
-					case 3:
-						console.log('case 1');
-						$scope.numdata = 3;
-						break;
-					case 4:
-						console.log('case 2');
-						$scope.numdata = 4;
-						break;
-				}
-				if($scope.showGame()==true){
-					$scope.hide($ionicLoading);
-					$scope.showAlertPopUp('Reemplaza la palabra', 'Intrucciones: Selecciona el sinónimo que reemplaza la palabra resaltada en el texto', true);
-					$scope.timer=20;
+				if(serveLevel.isLevel('ReplaceWordCtrl')){
+					$scope.numdata = serveLevel.getLevelParam();
+					if($scope.showGame()){
+						$scope.hide($ionicLoading);  
+						$scope.showAlertPopUp('Reemplaza la palabra', 'Intrucciones: Selecciona los sinónimos que encajen en los espacios del texto', true);
+						$scope.timer=20;
+					}else{
+						$scope.hide($ionicLoading); 
+						$scope.showAlertPopUp('Ha ocurrido un error', 'porfavor, vuelve a cargar el minijuego show');
+						$state.go('app.levels', {}, {reload: true});
+					}
 				}else{
 					$scope.hide($ionicLoading); 
 					$scope.showAlertPopUp('Ha ocurrido un error', 'porfavor, vuelve a cargar el minijuego');
@@ -2329,6 +2403,7 @@ angular.module('starter.controllers', [])
 
 .controller('SynonymousCtrl', function($scope, $http, $sce, $ionicLoading, $state, $compile, $ionicPopup, $timeout, serveInclude, serveData, serveLogin, viewService, serveLevel) {
 	viewService.setView('SynonymousCtrl');
+	$scope.playMusic();
 	var page = angular.element(document.getElementById('contenedor'));
 	var card = document.createElement('div');
 	var words = [];
@@ -2354,6 +2429,10 @@ angular.module('starter.controllers', [])
 					$timeout(update, 1000);
 					if($scope.startGame){
 						$scope.timer -= 1;
+						if($scope.timer<=5){
+							console.log("sound");
+							$scope.play('/sounds/time.wav');
+						}
 					}
 				}else{
 					$scope.timer = 0;
@@ -2398,6 +2477,7 @@ angular.module('starter.controllers', [])
 		}
 	};
 	$scope.pasarNivel= function(id){
+		$scope.pauseMusic();
 		if(successfulGame){
 			serveData.setLastLevel(id);
 			if(serveLogin.isLogin()){
@@ -2435,6 +2515,7 @@ angular.module('starter.controllers', [])
 		times++;
 		if($scope.id==id){
 			$scope.score += 10;
+			$scope.play('/sounds/good.wav');
 			if(vocabularyLength>0 && times<10){
 				//$scope.showAlertPopUp('Muy Bien', null);
 				$scope.timer = 20;
@@ -2450,6 +2531,7 @@ angular.module('starter.controllers', [])
 			}
 		}else{
 			$scope.score -= 2;
+			$scope.play('/sounds/fail.wav');
 			if(vocabularyLength>0 && times<10){
 				//$scope.showAlertPopUp('Fallaste, intenta en la siguiente', null);
 				$scope.timer=20;
@@ -2513,22 +2595,15 @@ angular.module('starter.controllers', [])
 				console.log(vocabularyLength);
 				if(serveLevel.isLevel('SynonymousCtrl')){
 					$scope.numdata = serveLevel.getLevelParam();
-				}
-				console.log($scope.numdata);
-				/*switch(serveInclude.getPage()){
-					case 1:
-						console.log('case 1');
-						$scope.numdata = 3;
-						break;
-					case 2:
-						console.log('case 2');
-						$scope.numdata = 4;
-						break;
-				}*/
-				if($scope.showGame()==true){
-					$scope.hide($ionicLoading);
-					$scope.showAlertPopUp('Sinónimos', 'Preparate!', true);
-					$scope.timer=20;
+					if($scope.showGame()){
+						$scope.hide($ionicLoading);  
+						$scope.showAlertPopUp('Sinónimos', 'Intrucciones: Selecciona el sinónimo de la palabra resaltada', true);
+						$scope.timer=20;
+					}else{
+						$scope.hide($ionicLoading); 
+						$scope.showAlertPopUp('Ha ocurrido un error', 'porfavor, vuelve a cargar el minijuego show');
+						$state.go('app.levels', {}, {reload: true});
+					}
 				}else{
 					$scope.hide($ionicLoading); 
 					$scope.showAlertPopUp('Ha ocurrido un error', 'porfavor, vuelve a cargar el minijuego');
@@ -2640,14 +2715,14 @@ angular.module('starter.controllers', [])
 	$scope.default = {image : 'default.png'};
 	$scope.user = serveLogin.getUser();
 	console.log("challengeDetail");
-	$scope.selectOptions =[
-		{ title: 'sinoninos', id: 7 , name: 'title1', img: 'crayons.jpg', link: 'synonymous'},
-		{ title: 'sinonimos y antonimos', id: 8 , name: 'title2', img: 'libros.jpg', link: 'synonymous'},
-		{ title: 'Palabra faltante', id: 1 , name: 'title3', img: 'letras.jpg', link: 'synonymousAntonym'},
-		{ title: 'Reemplaza la palabra', id: 3 , name: 'title4', img: 'lenguas.png', link: 'synonymous.html'},
-		{ title: 'Reemplaza la palabra x2', id: 5 , name: 'title4', img: 'lenguas.png', link: 'synonymous.html'},
-		{ title: '¿Sinónimo o Antonimo?', id: 4 , name: 'title5', img: 'idiomas.png', link: 'synonymous.html'},
-		{ title: 'Terminos Pareados', id: 6 , name: 'title6', img: 'crucigramas.jpg', link: 'synonymous.html'}
+	$scope.levels =[
+		{ title: 'sinoninos', id: 7, ctl: 'SynonymousCtrl', alt: 3, name: 'title1', img: 'crayons.jpg', link: 'synonymous'},
+		{ title: 'sinonimos y antonimos', ctl: 'synonymousAntonymCtrl', alt: 4, id: 8 , name: 'title2', img: 'libros.jpg', link: 'synonymousAntonym'},
+		{ title: 'Palabra faltante', ctl: 'MissingWordCtrl', alt: 3, id: 1 , name: 'title3', img: 'letras.jpg', link: 'missingWord'},
+		{ title: 'Reemplaza la palabra', ctl: 'ReplaceWordCtrl', alt: 3, id: 3 , name: 'title4', img: 'lenguas.png', link: 'replaceWord'},
+		{ title: 'Reemplaza la palabra x2', ctl: 'DoubleReplaceWordCtrl', alt: 3, id: 5 , name: 'title4', img: 'lenguas.png', link: 'doubleReplaceWord'},
+		{ title: '¿Sinónimo o Antonimo?', ctl: 'WordIdentifierCtrl', alt: 3, id: 4 , name: 'title5', img: 'idiomas.png', link: 'wordIdentifier'},
+		{ title: 'Terminos Pareados', ctl: 'TermsCoupletsCtrl', alt: 3, id: 6 , name: 'title6', img: 'crucigramas.jpg', link: 'termsCouplets'}
 	];
 	
 	console.log($scope.user);
@@ -2662,6 +2737,7 @@ angular.module('starter.controllers', [])
 		console.log(id);
 		angular.forEach($scope.levels, function(value, key) {
 			if(id == value.id){
+				console.log("ctl:"+value.ctl+", alt:"+value.alt+", id:"+value.id);
 				serveLevel.setLevelParam(value.ctl, value.alt, value.id);
 			}
 		});
@@ -2745,13 +2821,13 @@ angular.module('starter.controllers', [])
 	document.getElementById('lblCourse').className= "item item-input item-select labelDisabled";
 	document.getElementById('comboCourse').disabled=true;
 	$scope.selectOptions =[
-		{ title: 'sinoninos', id: 7 , name: 'title1', img: 'crayons.jpg', link: 'synonymous'},
-		{ title: 'sinonimos y antonimos', id: 8 , name: 'title2', img: 'libros.jpg', link: 'synonymous'},
-		{ title: 'Palabra faltante', id: 1 , name: 'title3', img: 'letras.jpg', link: 'synonymousAntonym'},
-		{ title: 'Reemplaza la palabra', id: 3 , name: 'title4', img: 'lenguas.png', link: 'synonymous.html'},
-		{ title: 'Reemplaza la palabra x2', id: 5 , name: 'title4', img: 'lenguas.png', link: 'synonymous.html'},
-		{ title: '¿Sinónimo o Antonimo?', id: 4 , name: 'title5', img: 'idiomas.png', link: 'synonymous.html'},
-		{ title: 'Terminos Pareados', id: 6 , name: 'title6', img: 'crucigramas.jpg', link: 'synonymous.html'}
+		{ title: 'sinoninos', id: 7, ctl: 'SynonymousCtrl', alt: 3, name: 'title1', img: 'crayons.jpg', link: 'synonymous'},
+		{ title: 'sinonimos y antonimos', ctl: 'synonymousAntonymCtrl', alt: 4, id: 8 , name: 'title2', img: 'libros.jpg', link: 'synonymousAntonym'},
+		{ title: 'Palabra faltante', ctl: 'MissingWordCtrl', alt: 3, id: 1 , name: 'title3', img: 'letras.jpg', link: 'missingWord'},
+		{ title: 'Reemplaza la palabra', ctl: 'ReplaceWordCtrl', alt: 3, id: 3 , name: 'title4', img: 'lenguas.png', link: 'replaceWord'},
+		{ title: 'Reemplaza la palabra x2', ctl: 'DoubleReplaceWordCtrl', alt: 3, id: 5 , name: 'title4', img: 'lenguas.png', link: 'doubleReplaceWord'},
+		{ title: '¿Sinónimo o Antonimo?', ctl: 'WordIdentifierCtrl', alt: 3, id: 4 , name: 'title5', img: 'idiomas.png', link: 'wordIdentifier'},
+		{ title: 'Terminos Pareados', ctl: 'TermsCoupletsCtrl', alt: 3, id: 6 , name: 'title6', img: 'crucigramas.jpg', link: 'termsCouplets'}
 	];
 	$scope.selectedselectedLvl;
 	$scope.selectedOrg;
